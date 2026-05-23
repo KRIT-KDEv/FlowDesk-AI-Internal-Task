@@ -103,6 +103,41 @@ If a new dependency is needed, explain:
 
 ---
 
+## Optional Frontend Design Skill
+
+This project may use Impeccable as an optional frontend design skill.
+
+Use Impeccable only for:
+
+- UI polish
+- Layout critique
+- Spacing
+- Typography
+- Visual hierarchy
+- Responsive review
+- Anti-generic AI design checks
+
+Do not use Impeccable to change:
+
+- Product scope
+- Business logic
+- Database schema
+- Routing structure
+- Feature priorities
+- MVP boundaries
+
+When using Impeccable, prefer product UI mode because FlowDesk AI Dashboard is an internal dashboard app, not a marketing landing page.
+
+Use Impeccable after the base UI structure exists, especially during:
+
+- Dashboard layout polish
+- Task table polish
+- Kanban board polish
+- AI summary page polish
+- Final MVP visual review
+
+---
+
 ## MVP Scope
 
 Build only the following MVP features:
