@@ -88,7 +88,7 @@ Use this stack:
 - Tailwind CSS
 - shadcn/ui
 - Prisma
-- PostgreSQL
+- Supabase PostgreSQL
 - Mock auth during MVP unless auth is explicitly requested
 - Mock AI output before real AI integration
 - Vercel for deployment
@@ -100,6 +100,76 @@ If a new dependency is needed, explain:
 1. Why it is needed
 2. Where it will be used
 3. Whether there is a simpler option
+
+---
+
+## Database Direction
+
+The database direction for FlowDesk AI Dashboard is:
+
+- Database provider: Supabase PostgreSQL
+- ORM: Prisma as the main ORM for application database access
+
+Preferred architecture:
+
+```txt
+Next.js Server
+-> Prisma Client
+-> Supabase PostgreSQL
+```
+
+Keep database access server-side through Prisma during the MVP.
+
+Use mock data until database setup is explicitly requested.
+
+### Supabase Usage Rules
+
+During the MVP:
+
+- Do not use Supabase Client in frontend components
+- Do not add Supabase Auth yet
+- Do not add Supabase Realtime yet
+- Do not add Supabase Storage yet
+- Do not add RLS policies yet
+- Do not enable or depend on RLS for MVP database access yet
+- Do not expose database connection strings to the browser
+- Do not add `NEXT_PUBLIC_SUPABASE_URL` yet
+- Do not add `NEXT_PUBLIC_SUPABASE_ANON_KEY` yet
+- Keep all database access server-side through Prisma
+
+### Database Environment Variables
+
+The current MVP database setup should require only:
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+
+`DATABASE_URL` is used by Prisma Client at runtime.
+
+`DIRECT_URL` is used by Prisma Migrate or direct migration operations.
+
+Both values should come from the Supabase PostgreSQL connection settings.
+
+Real values belong in `.env`.
+
+Placeholder values belong in `.env.example`.
+
+`.env` must never be committed.
+
+`.env.example` can be committed.
+
+### Environment Security Rules
+
+- Do not read, print, modify, overwrite, or delete the real `.env` file
+- Do not expose real environment variable values
+- Do not include real Supabase connection strings in any generated files
+- Only use placeholder values when documenting environment variables
+
+### Future Database Hardening
+
+Start with the simple Supabase connection path first.
+
+Later, the project may move to a custom Prisma database user for production hardening.
 
 ---
 
