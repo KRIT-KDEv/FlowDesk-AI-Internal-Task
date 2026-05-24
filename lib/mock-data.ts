@@ -14,6 +14,8 @@ export const demoWorkspace: Workspace = {
     "Demo small agency workspace for content, design, ads, and client work."
 };
 
+export const DEMO_TODAY = "2026-05-24";
+
 export const demoMembers: Member[] = [
   {
     id: "member-admin",
@@ -208,7 +210,7 @@ export const demoTasks: Task[] = taskSeeds.map((task) => ({
   ...task,
   statusLabel: TASK_STATUS_LABELS[task.status],
   priorityLabel: TASK_PRIORITY_LABELS[task.priority],
-  isOverdue: task.status !== "DONE" && task.dueDate < "2026-05-23"
+  isOverdue: task.status !== "DONE" && task.dueDate < DEMO_TODAY
 }));
 
 export const aiSummaries: AiSummary[] = [
