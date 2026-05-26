@@ -5,14 +5,14 @@ import { RecentTasks } from "@/components/dashboard/recent-tasks";
 import { getDashboardData } from "@/lib/dashboard-data";
 import {
   DEMO_TODAY,
-  aiSummaries,
   demoWorkspace
 } from "@/lib/mock-data";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const { metrics, recentTasks, overdueTasks } = await getDashboardData();
+  const { metrics, recentTasks, overdueTasks, latestAISummary } =
+    await getDashboardData();
 
   return (
     <main className="space-y-6">
@@ -74,7 +74,7 @@ export default async function DashboardPage() {
       </section>
 
       <section>
-        <AiSummaryPreview summaries={aiSummaries} />
+        <AiSummaryPreview summary={latestAISummary} />
       </section>
     </main>
   );
