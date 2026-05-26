@@ -2,6 +2,9 @@
   "name": "flowdesk-ai-dashboard",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,6 +27,7 @@
     "postcss": "^8.4.41",
     "prisma": "^6.19.3",
     "tailwindcss": "^3.4.10",
+    "tsx": "^4.22.3",
     "typescript": "^5.5.4"
   }
 }
