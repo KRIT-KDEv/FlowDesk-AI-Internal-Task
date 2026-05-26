@@ -2,23 +2,17 @@ import { AiSummaryPreview } from "@/components/dashboard/ai-summary-preview";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { OverdueTasks } from "@/components/dashboard/overdue-tasks";
 import { RecentTasks } from "@/components/dashboard/recent-tasks";
-import { getDashboardMetrics } from "@/lib/dashboard-data";
+import { getDashboardData } from "@/lib/dashboard-data";
 import {
   DEMO_TODAY,
   aiSummaries,
-  demoMembers,
-  demoTasks,
   demoWorkspace
 } from "@/lib/mock-data";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const metrics = await getDashboardMetrics();
-  const overdueTasks = demoTasks.filter((task) => task.isOverdue);
-  const recentTasks = [...demoTasks]
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-    .slice(0, 5);
+  const { metrics, recentTasks, overdueTasks } = await getDashboardData();
 
   return (
     <main className="space-y-6">
@@ -75,8 +69,8 @@ export default async function DashboardPage() {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(360px,0.75fr)]">
-        <RecentTasks tasks={recentTasks} members={demoMembers} />
-        <OverdueTasks tasks={overdueTasks.slice(0, 4)} members={demoMembers} />
+        <RecentTasks tasks={recentTasks} />
+        <OverdueTasks tasks={overdueTasks} />
       </section>
 
       <section>

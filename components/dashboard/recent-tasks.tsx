@@ -1,13 +1,22 @@
 import Link from "next/link";
-import type { Member, Task } from "@/types";
+import type { getRecentTasks } from "@/lib/dashboard-data";
 import { cn } from "@/lib/utils";
 
+type RecentTask = Awaited<ReturnType<typeof getRecentTasks>>[number];
+
 type RecentTasksProps = {
-  tasks: Task[];
-  members: Member[];
+  tasks: RecentTask[];
 };
 
-const statusStyles: Record<Task["status"], string> = {
+const statusLabels: Record<RecentTask["status"], string> = {
+  TODO: "Todo",
+  IN_PROGRESS: "In Progress",
+  REVIEW: "Review",
+  DONE: "Done",
+  BLOCKED: "Blocked"
+};
+
+const statusStyles: Record<RecentTask["status"], string> = {
   TODO: "bg-background text-muted ring-border",
   IN_PROGRESS: "bg-accent-soft text-accent ring-accent/20",
   REVIEW: "bg-warning-soft text-warning ring-warning/20",
@@ -15,7 +24,17 @@ const statusStyles: Record<Task["status"], string> = {
   BLOCKED: "bg-danger-soft text-danger ring-danger/20"
 };
 
-export function RecentTasks({ tasks, members }: RecentTasksProps) {
+const dueDateFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric"
+});
+
+function formatDueDate(dueDate: RecentTask["dueDate"]) {
+  return dueDate ? dueDateFormatter.format(dueDate) : "No due date";
+}
+
+export function RecentTasks({ tasks }: RecentTasksProps) {
   return (
     <section className="rounded-lg border border-border bg-panel shadow-sm">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4">
@@ -29,12 +48,8 @@ export function RecentTasks({ tasks, members }: RecentTasksProps) {
       </div>
 
       <div className="divide-y divide-border">
-        {tasks.map((task) => {
-          const assignee = members.find(
-            (member) => member.id === task.assigneeId
-          );
-
-          return (
+        {tasks.length > 0 ? (
+          tasks.map((task) => (
             <Link
               key={task.id}
               href={`/tasks/${task.id}`}
@@ -43,10 +58,12 @@ export function RecentTasks({ tasks, members }: RecentTasksProps) {
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">{task.title}</p>
                 <p className="mt-1 text-xs text-muted">
-                  {task.client} - {assignee?.name ?? "Unassigned"}
+                  {task.assignee?.name ?? "Unassigned"}
                 </p>
               </div>
-              <div className="text-sm text-muted">Due {task.dueDate}</div>
+              <div className="text-sm text-muted">
+                Due {formatDueDate(task.dueDate)}
+              </div>
               <div>
                 <span
                   className={cn(
@@ -54,12 +71,16 @@ export function RecentTasks({ tasks, members }: RecentTasksProps) {
                     statusStyles[task.status]
                   )}
                 >
-                  {task.statusLabel}
+                  {statusLabels[task.status]}
                 </span>
               </div>
             </Link>
-          );
-        })}
+          ))
+        ) : (
+          <div className="px-4 py-6 text-sm text-muted">
+            No recent tasks in the demo workspace.
+          </div>
+        )}
       </div>
     </section>
   );

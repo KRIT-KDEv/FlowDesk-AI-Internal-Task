@@ -1,12 +1,30 @@
 import Link from "next/link";
-import type { Member, Task } from "@/types";
+import type { getOverdueTasks } from "@/lib/dashboard-data";
+
+type OverdueTask = Awaited<ReturnType<typeof getOverdueTasks>>[number];
 
 type OverdueTasksProps = {
-  tasks: Task[];
-  members: Member[];
+  tasks: OverdueTask[];
 };
 
-export function OverdueTasks({ tasks, members }: OverdueTasksProps) {
+const priorityLabels: Record<OverdueTask["priority"], string> = {
+  LOW: "Low",
+  MEDIUM: "Medium",
+  HIGH: "High",
+  URGENT: "Urgent"
+};
+
+const dueDateFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric"
+});
+
+function formatDueDate(dueDate: OverdueTask["dueDate"]) {
+  return dueDate ? dueDateFormatter.format(dueDate) : "No due date";
+}
+
+export function OverdueTasks({ tasks }: OverdueTasksProps) {
   return (
     <section className="rounded-lg border border-border bg-panel shadow-sm">
       <div className="border-b border-border px-4 py-4">
@@ -18,12 +36,7 @@ export function OverdueTasks({ tasks, members }: OverdueTasksProps) {
 
       <div className="divide-y divide-border">
         {tasks.length > 0 ? (
-          tasks.map((task) => {
-            const assignee = members.find(
-              (member) => member.id === task.assigneeId
-            );
-
-            return (
+          tasks.map((task) => (
               <Link
                 key={task.id}
                 href={`/tasks/${task.id}`}
@@ -33,17 +46,18 @@ export function OverdueTasks({ tasks, members }: OverdueTasksProps) {
                   <div className="min-w-0">
                     <p className="text-sm font-medium">{task.title}</p>
                     <p className="mt-1 text-xs text-muted">
-                      {assignee?.name ?? "Unassigned"} - {task.client}
+                      {task.assignee?.name ?? "Unassigned"}
                     </p>
                   </div>
                   <span className="rounded-full bg-danger-soft px-2.5 py-1 text-xs font-medium text-danger">
-                    {task.priorityLabel}
+                    {priorityLabels[task.priority]}
                   </span>
                 </div>
-                <p className="mt-3 text-xs text-muted">Due {task.dueDate}</p>
+                <p className="mt-3 text-xs text-muted">
+                  Due {formatDueDate(task.dueDate)}
+                </p>
               </Link>
-            );
-          })
+          ))
         ) : (
           <div className="px-4 py-6 text-sm text-muted">
             No overdue tasks in the demo workspace.
