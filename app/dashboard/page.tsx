@@ -2,6 +2,7 @@ import { AiSummaryPreview } from "@/components/dashboard/ai-summary-preview";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { OverdueTasks } from "@/components/dashboard/overdue-tasks";
 import { RecentTasks } from "@/components/dashboard/recent-tasks";
+import { getDashboardMetrics } from "@/lib/dashboard-data";
 import {
   DEMO_TODAY,
   aiSummaries,
@@ -10,21 +11,14 @@ import {
   demoWorkspace
 } from "@/lib/mock-data";
 
-export default function DashboardPage() {
+export const dynamic = "force-dynamic";
+
+export default async function DashboardPage() {
+  const metrics = await getDashboardMetrics();
   const overdueTasks = demoTasks.filter((task) => task.isOverdue);
-  const inProgressTasks = demoTasks.filter(
-    (task) => task.status === "IN_PROGRESS"
-  );
-  const dueTodayTasks = demoTasks.filter((task) => task.dueDate === DEMO_TODAY);
-  const completedThisWeekTasks = demoTasks.filter(
-    (task) => task.status === "DONE"
-  );
   const recentTasks = [...demoTasks]
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
     .slice(0, 5);
-  const highestRiskOverdue = overdueTasks.filter(
-    (task) => task.priority === "HIGH" || task.priority === "URGENT"
-  ).length;
 
   return (
     <main className="space-y-6">
@@ -50,32 +44,32 @@ export default function DashboardPage() {
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <MetricCard
           title="Total tasks"
-          value={demoTasks.length}
-          caption={`${demoMembers.length} demo team members assigned`}
+          value={metrics.totalTasks}
+          caption="Tasks in the BrightAds Agency workspace"
           tone="accent"
         />
         <MetricCard
           title="In progress"
-          value={inProgressTasks.length}
+          value={metrics.inProgressTasks}
           caption="Active work moving through the team"
           tone="neutral"
         />
         <MetricCard
           title="Due today"
-          value={dueTodayTasks.length}
+          value={metrics.dueTodayTasks}
           caption="Needs status clarity before end of day"
           tone="warning"
         />
         <MetricCard
           title="Overdue"
-          value={overdueTasks.length}
-          caption={`${highestRiskOverdue} high-risk overdue items`}
+          value={metrics.overdueTasks}
+          caption="Past due and still open"
           tone="danger"
         />
         <MetricCard
           title="Completed this week"
-          value={completedThisWeekTasks.length}
-          caption="Finished work in the demo dataset"
+          value={metrics.completedThisWeek}
+          caption="Done tasks updated this week"
           tone="success"
         />
       </section>
