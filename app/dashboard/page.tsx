@@ -3,16 +3,21 @@ import { MetricCard } from "@/components/dashboard/metric-card";
 import { OverdueTasks } from "@/components/dashboard/overdue-tasks";
 import { RecentTasks } from "@/components/dashboard/recent-tasks";
 import { getDashboardData } from "@/lib/dashboard-data";
-import {
-  DEMO_TODAY,
-  demoWorkspace
-} from "@/lib/mock-data";
 
 export const dynamic = "force-dynamic";
+
+const DASHBOARD_WORKSPACE_NAME = "BrightAds Agency";
+
+const dateFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric"
+});
 
 export default async function DashboardPage() {
   const { metrics, recentTasks, overdueTasks, latestAISummary } =
     await getDashboardData();
+  const dashboardDate = dateFormatter.format(new Date());
 
   return (
     <main className="space-y-6">
@@ -22,16 +27,16 @@ export default async function DashboardPage() {
             Dashboard overview
           </p>
           <h1 className="mt-2 text-2xl font-semibold tracking-normal sm:text-3xl">
-            {demoWorkspace.name}
+            {DASHBOARD_WORKSPACE_NAME}
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Operational snapshot for content, design, ads, and client work.
-            Built from mock data only for the Day 3 MVP layout pass.
+            Built from the Prisma-backed BrightAds Agency demo workspace.
           </p>
         </div>
         <div className="rounded-lg border border-border bg-panel px-4 py-3 text-sm shadow-sm">
-          <p className="text-xs font-medium uppercase text-muted">Demo date</p>
-          <p className="mt-1 font-semibold">{DEMO_TODAY}</p>
+          <p className="text-xs font-medium uppercase text-muted">Today</p>
+          <p className="mt-1 font-semibold">{dashboardDate}</p>
         </div>
       </section>
 
