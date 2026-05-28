@@ -59,20 +59,10 @@ function getTasksWhere(filters: GetTasksFilters = {}): Prisma.TaskWhereInput {
   const searchTerm = search?.trim()
 
   if (searchTerm) {
-    where.OR = [
-      {
-        title: {
-          contains: searchTerm,
-          mode: "insensitive",
-        },
-      },
-      {
-        description: {
-          contains: searchTerm,
-          mode: "insensitive",
-        },
-      },
-    ]
+    where.title = {
+      contains: searchTerm,
+      mode: "insensitive",
+    }
   }
 
   if (status) {

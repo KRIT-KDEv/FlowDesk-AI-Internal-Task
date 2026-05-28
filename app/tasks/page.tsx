@@ -1,9 +1,33 @@
 import Link from "next/link";
+import type { TaskPriority, TaskStatus } from "@prisma/client";
 
-import type { TaskListItem } from "@/lib/task-data";
+import type { GetTasksFilters, TaskListItem } from "@/lib/task-data";
 import { getTaskListData } from "@/lib/task-data";
 
 export const dynamic = "force-dynamic";
+
+const statusOptions = [
+  { value: "TODO", label: "Todo" },
+  { value: "IN_PROGRESS", label: "In Progress" },
+  { value: "REVIEW", label: "Review" },
+  { value: "DONE", label: "Done" },
+  { value: "BLOCKED", label: "Blocked" }
+] as const satisfies ReadonlyArray<{ value: TaskStatus; label: string }>;
+
+const priorityOptions = [
+  { value: "LOW", label: "Low" },
+  { value: "MEDIUM", label: "Medium" },
+  { value: "HIGH", label: "High" },
+  { value: "URGENT", label: "Urgent" }
+] as const satisfies ReadonlyArray<{ value: TaskPriority; label: string }>;
+
+const allowedStatuses = new Set<TaskStatus>(
+  statusOptions.map((option) => option.value)
+);
+
+const allowedPriorities = new Set<TaskPriority>(
+  priorityOptions.map((option) => option.value)
+);
 
 const statusLabels: Record<TaskListItem["status"], string> = {
   TODO: "Todo",
@@ -30,8 +54,47 @@ function formatDueDate(dueDate: TaskListItem["dueDate"]) {
   return dueDate ? dueDateFormatter.format(dueDate) : "No due date";
 }
 
-export default async function TasksPage() {
-  const { tasks } = await getTaskListData();
+type TasksPageSearchParams = {
+  search?: string | string[];
+  status?: string | string[];
+  priority?: string | string[];
+};
+
+type TasksPageProps = {
+  searchParams?: TasksPageSearchParams;
+};
+
+function getSingleSearchParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function getValidatedTaskFilters(
+  searchParams: TasksPageSearchParams = {}
+): GetTasksFilters {
+  const search = getSingleSearchParam(searchParams.search)?.trim();
+  const status = getSingleSearchParam(searchParams.status);
+  const priority = getSingleSearchParam(searchParams.priority);
+
+  return {
+    ...(search ? { search } : {}),
+    ...(status && allowedStatuses.has(status as TaskStatus)
+      ? { status: status as TaskStatus }
+      : {}),
+    ...(priority && allowedPriorities.has(priority as TaskPriority)
+      ? { priority: priority as TaskPriority }
+      : {})
+  };
+}
+
+export default async function TasksPage({
+  searchParams = {}
+}: TasksPageProps) {
+  const filters = getValidatedTaskFilters(searchParams);
+  const { tasks } = await getTaskListData(filters);
+  const searchValue = filters.search ?? "";
+  const statusValue = filters.status ?? "";
+  const priorityValue = filters.priority ?? "";
+  const hasFilters = Boolean(filters.search || filters.status || filters.priority);
 
   return (
     <main className="space-y-6">
@@ -42,6 +105,69 @@ export default async function TasksPage() {
           Read-only task list from the BrightAds Agency workspace.
         </p>
       </section>
+
+      <form
+        action="/tasks"
+        className="grid gap-3 rounded-lg border border-border bg-panel p-4 md:grid-cols-[minmax(0,1fr)_180px_180px_auto]"
+        method="get"
+      >
+        <label className="grid gap-2 text-sm font-medium">
+          Search
+          <input
+            className="h-10 rounded-md border border-border bg-background px-3 text-sm font-normal outline-none focus:border-accent"
+            defaultValue={searchValue}
+            name="search"
+            placeholder="Search task title"
+            type="search"
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-medium">
+          Status
+          <select
+            className="h-10 rounded-md border border-border bg-background px-3 text-sm font-normal outline-none focus:border-accent"
+            defaultValue={statusValue}
+            name="status"
+          >
+            <option value="">All statuses</option>
+            {statusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-medium">
+          Priority
+          <select
+            className="h-10 rounded-md border border-border bg-background px-3 text-sm font-normal outline-none focus:border-accent"
+            defaultValue={priorityValue}
+            name="priority"
+          >
+            <option value="">All priorities</option>
+            {priorityOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="flex items-end gap-2">
+          <button
+            className="h-10 rounded-md bg-accent px-4 text-sm font-medium text-white"
+            type="submit"
+          >
+            Apply
+          </button>
+          {hasFilters ? (
+            <Link
+              className="flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
+              href="/tasks"
+            >
+              Clear
+            </Link>
+          ) : null}
+        </div>
+      </form>
 
       <section className="overflow-hidden rounded-lg border border-border bg-panel">
         <div className="grid grid-cols-5 border-b border-border px-4 py-3 text-sm font-medium text-muted">
@@ -67,7 +193,9 @@ export default async function TasksPage() {
           ))
         ) : (
           <div className="px-4 py-6 text-sm text-muted">
-            No tasks in the BrightAds Agency workspace.
+            {hasFilters
+              ? "No tasks match the current filters."
+              : "No tasks in the BrightAds Agency workspace."}
           </div>
         )}
       </section>
