@@ -78,6 +78,11 @@ export type GetTasksFilters = {
   workspaceSlug?: string
 }
 
+export type TaskFormAssigneeOption = {
+  id: string
+  name: string
+}
+
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -144,6 +149,39 @@ export async function getTaskListData(filters: GetTasksFilters = {}) {
 
   return {
     tasks,
+  }
+}
+
+export async function getWorkspaceMembersForTaskForm(
+  workspaceSlug = DEFAULT_WORKSPACE_SLUG
+): Promise<TaskFormAssigneeOption[]> {
+  const members = await prisma.workspaceMember.findMany({
+    where: {
+      workspace: {
+        slug: workspaceSlug,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+    select: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  })
+
+  return members.map((member) => member.user)
+}
+
+export async function getCreateTaskFormData() {
+  const assigneeOptions = await getWorkspaceMembersForTaskForm()
+
+  return {
+    assigneeOptions,
   }
 }
 

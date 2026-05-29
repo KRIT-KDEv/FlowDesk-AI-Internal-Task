@@ -7,6 +7,7 @@ type AssigneeOption = {
 };
 
 type CreateTaskFormProps = {
+  action: (formData: FormData) => void | Promise<void>;
   assigneeOptions?: AssigneeOption[];
 };
 
@@ -30,12 +31,14 @@ const fieldClassName =
 
 const labelClassName = "grid gap-2 text-sm font-medium";
 
-export function CreateTaskForm({ assigneeOptions = [] }: CreateTaskFormProps) {
+export function CreateTaskForm({
+  action,
+  assigneeOptions = []
+}: CreateTaskFormProps) {
   return (
     <form
-      action="/tasks/new"
+      action={action}
       className="rounded-lg border border-border bg-panel p-5 shadow-sm"
-      method="get"
     >
       <div className="grid gap-5">
         <label className={labelClassName}>
