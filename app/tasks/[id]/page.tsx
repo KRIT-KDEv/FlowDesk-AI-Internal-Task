@@ -40,16 +40,32 @@ function formatDate(date: Date) {
   return dateFormatter.format(date);
 }
 
+function getDisplayText(value: string | null | undefined, fallback: string) {
+  const text = value?.trim();
+
+  return text ? text : fallback;
+}
+
 export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   const data = await getTaskDetailData(params.id);
 
   if (!data) {
     return (
-      <main className="space-y-4">
-        <h1 className="text-3xl font-semibold">Task not found</h1>
-        <Link className="text-accent" href="/tasks">
-          Back to tasks
-        </Link>
+      <main className="space-y-6">
+        <section className="rounded-lg border border-border bg-panel p-6">
+          <p className="text-sm font-medium text-accent">Task detail</p>
+          <h1 className="mt-2 text-3xl font-semibold">Task not found</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
+            This task could not be found in the BrightAds Agency workspace. It
+            may have been removed, or the task link may be incorrect.
+          </p>
+          <Link
+            className="mt-5 inline-flex rounded-md border border-border px-4 py-2 text-sm font-medium text-accent"
+            href="/tasks"
+          >
+            Back to tasks
+          </Link>
+        </section>
       </main>
     );
   }
@@ -65,7 +81,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
         <p className="mt-3 text-sm font-medium text-accent">Task detail</p>
         <h1 className="text-3xl font-semibold">{task.title}</h1>
         <p className="mt-2 text-muted">
-          {task.description ?? "No description provided."}
+          {getDisplayText(task.description, "No description provided.")}
         </p>
       </section>
 
@@ -81,22 +97,26 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
         <div className="rounded-lg border border-border bg-panel p-4">
           <p className="text-sm text-muted">Assignee</p>
           <p className="mt-1 font-medium">
-            {task.assignee?.name ?? "Unassigned."}
+            {getDisplayText(task.assignee?.name, "Unassigned")}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-panel p-4">
           <p className="text-sm text-muted">Due date</p>
           <p className="mt-1 font-medium">
-            {formatOptionalDate(task.dueDate, "No due date.")}
+            {formatOptionalDate(task.dueDate, "No due date")}
           </p>
         </div>
         <div className="rounded-lg border border-border bg-panel p-4">
           <p className="text-sm text-muted">Created by</p>
-          <p className="mt-1 font-medium">{task.createdBy.name}</p>
+          <p className="mt-1 font-medium">
+            {getDisplayText(task.createdBy?.name, "Unknown creator")}
+          </p>
         </div>
         <div className="rounded-lg border border-border bg-panel p-4">
           <p className="text-sm text-muted">Workspace</p>
-          <p className="mt-1 font-medium">{task.workspace.name}</p>
+          <p className="mt-1 font-medium">
+            {getDisplayText(task.workspace?.name, "Unknown workspace")}
+          </p>
         </div>
         <div className="rounded-lg border border-border bg-panel p-4">
           <p className="text-sm text-muted">Created</p>
