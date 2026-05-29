@@ -100,7 +100,15 @@ export default async function TasksPage({
     <main className="space-y-6">
       <section>
         <p className="text-sm font-medium text-accent">Task management</p>
-        <h1 className="text-3xl font-semibold">Tasks</h1>
+        <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-3xl font-semibold">Tasks</h1>
+          <Link
+            className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
+            href="/tasks/new"
+          >
+            New task
+          </Link>
+        </div>
         <p className="mt-2 text-muted">
           Read-only task list from the BrightAds Agency workspace.
         </p>
