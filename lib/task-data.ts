@@ -1,4 +1,4 @@
-import type { Prisma, TaskPriority, TaskStatus } from "@prisma/client"
+import type { MemberRole, Prisma, TaskPriority, TaskStatus } from "@prisma/client"
 
 import { prisma } from "@/lib/prisma"
 
@@ -62,12 +62,27 @@ const taskDetailSelect = {
   },
 } satisfies Prisma.TaskSelect
 
+const editTaskFormSelect = {
+  id: true,
+  title: true,
+  description: true,
+  status: true,
+  priority: true,
+  dueDate: true,
+  assigneeId: true,
+  workspaceId: true,
+} satisfies Prisma.TaskSelect
+
 export type TaskListItem = Prisma.TaskGetPayload<{
   select: typeof taskListSelect
 }>
 
 export type TaskDetailItem = Prisma.TaskGetPayload<{
   select: typeof taskDetailSelect
+}>
+
+export type EditTaskFormTask = Prisma.TaskGetPayload<{
+  select: typeof editTaskFormSelect
 }>
 
 export type GetTasksFilters = {
@@ -81,6 +96,7 @@ export type GetTasksFilters = {
 export type TaskFormAssigneeOption = {
   id: string
   name: string
+  role: MemberRole
 }
 
 const uuidPattern =
@@ -165,6 +181,7 @@ export async function getWorkspaceMembersForTaskForm(
       createdAt: "asc",
     },
     select: {
+      role: true,
       user: {
         select: {
           id: true,
@@ -174,7 +191,11 @@ export async function getWorkspaceMembersForTaskForm(
     },
   })
 
-  return members.map((member) => member.user)
+  return members.map((member) => ({
+    id: member.user.id,
+    name: member.user.name,
+    role: member.role,
+  }))
 }
 
 export async function getCreateTaskFormData() {
@@ -209,5 +230,34 @@ export async function getTaskDetailData(id: string) {
 
   return {
     task,
+  }
+}
+
+export async function getEditTaskFormData(id: string) {
+  const taskId = id.trim()
+
+  if (!isUuid(taskId)) {
+    return null
+  }
+
+  const task = await prisma.task.findFirst({
+    where: {
+      id: taskId,
+      workspace: {
+        slug: DEFAULT_WORKSPACE_SLUG,
+      },
+    },
+    select: editTaskFormSelect,
+  })
+
+  if (!task) {
+    return null
+  }
+
+  const assigneeOptions = await getWorkspaceMembersForTaskForm()
+
+  return {
+    task,
+    assigneeOptions,
   }
 }
