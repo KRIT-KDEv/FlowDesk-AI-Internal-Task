@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { EditTaskForm } from "@/components/tasks/edit-task-form";
 import { getEditTaskFormData } from "@/lib/task-data";
+import { updateTaskAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +10,27 @@ type EditTaskPageProps = {
   params: {
     id: string;
   };
+  searchParams?: {
+    error?: string | string[];
+  };
 };
 
-export default async function EditTaskPage({ params }: EditTaskPageProps) {
+const errorMessages: Record<string, string> = {
+  "invalid-assignee": "Choose a valid BrightAds Agency assignee.",
+  "invalid-due-date": "Use a valid due date.",
+  "invalid-priority": "Choose a valid priority.",
+  "invalid-status": "Choose a valid status.",
+  "title-required": "Add a task title before saving changes."
+};
+
+function getSingleSearchParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function EditTaskPage({
+  params,
+  searchParams = {}
+}: EditTaskPageProps) {
   const data = await getEditTaskFormData(params.id);
 
   if (!data) {
@@ -37,6 +56,8 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
 
   const { assigneeOptions, task } = data;
   const taskHref = `/tasks/${task.id}`;
+  const error = getSingleSearchParam(searchParams.error);
+  const errorMessage = error ? errorMessages[error] : null;
 
   return (
     <main className="space-y-6">
@@ -59,7 +80,14 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
         </div>
       </section>
 
+      {errorMessage ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {errorMessage}
+        </div>
+      ) : null}
+
       <EditTaskForm
+        action={updateTaskAction}
         assigneeOptions={assigneeOptions}
         cancelHref={taskHref}
         task={task}

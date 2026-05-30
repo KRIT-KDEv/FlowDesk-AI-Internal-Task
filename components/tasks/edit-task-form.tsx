@@ -7,6 +7,7 @@ import type {
 } from "@/lib/task-data";
 
 type EditTaskFormProps = {
+  action: (formData: FormData) => void | Promise<void>;
   assigneeOptions: TaskFormAssigneeOption[];
   cancelHref: string;
   task: EditTaskFormTask;
@@ -37,12 +38,17 @@ function formatDateInputValue(dueDate: Date | null) {
 }
 
 export function EditTaskForm({
+  action,
   assigneeOptions,
   cancelHref,
   task
 }: EditTaskFormProps) {
   return (
-    <form className="rounded-lg border border-border bg-panel p-5 shadow-sm">
+    <form
+      action={action}
+      className="rounded-lg border border-border bg-panel p-5 shadow-sm"
+    >
+      <input name="taskId" type="hidden" value={task.id} />
       <div className="grid gap-5">
         <label className={labelClassName}>
           Title
@@ -133,7 +139,7 @@ export function EditTaskForm({
         </Link>
         <button
           className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
-          type="button"
+          type="submit"
         >
           Save changes
         </button>
