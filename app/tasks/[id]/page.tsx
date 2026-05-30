@@ -75,14 +75,24 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   return (
     <main className="space-y-6">
       <section>
-        <Link className="text-sm font-medium text-accent" href="/tasks">
-          Back to tasks
-        </Link>
-        <p className="mt-3 text-sm font-medium text-accent">Task detail</p>
-        <h1 className="text-3xl font-semibold">{task.title}</h1>
-        <p className="mt-2 text-muted">
-          {getDisplayText(task.description, "No description provided.")}
-        </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <Link className="text-sm font-medium text-accent" href="/tasks">
+              Back to tasks
+            </Link>
+            <p className="mt-3 text-sm font-medium text-accent">Task detail</p>
+            <h1 className="text-3xl font-semibold">{task.title}</h1>
+            <p className="mt-2 text-muted">
+              {getDisplayText(task.description, "No description provided.")}
+            </p>
+          </div>
+          <Link
+            className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
+            href={`/tasks/${task.id}/edit`}
+          >
+            Edit task
+          </Link>
+        </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
