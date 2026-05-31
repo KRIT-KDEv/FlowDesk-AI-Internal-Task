@@ -46,7 +46,7 @@ export default async function NewTaskPage({
           </p>
           <h1 className="text-3xl font-semibold">New task</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-            Capture a new internal work item for the BrightAds Agency workspace.
+            Create a tracked internal work item for BrightAds Agency.
           </p>
         </div>
         <div className="rounded-lg border border-border bg-panel px-4 py-3 text-sm shadow-sm">

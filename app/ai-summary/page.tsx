@@ -4,11 +4,11 @@ export default function AiSummaryPage() {
   return (
     <main className="space-y-6">
       <section>
-        <p className="text-sm font-medium text-accent">Mock AI output</p>
+        <p className="text-sm font-medium text-accent">AI preview</p>
         <h1 className="text-3xl font-semibold">AI Summary</h1>
         <p className="mt-2 text-muted">
-          Placeholder summaries are mocked from demo data. No AI API is wired
-          today.
+          Prepared summary examples show the intended daily and weekly output.
+          Live AI generation is not connected yet.
         </p>
       </section>
 

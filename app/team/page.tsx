@@ -7,7 +7,7 @@ export default function TeamPage() {
         <p className="text-sm font-medium text-accent">Team workload</p>
         <h1 className="text-3xl font-semibold">Team</h1>
         <p className="mt-2 text-muted">
-          Demo team members and simple assigned task counts.
+          Preview BrightAds Agency members and assigned task counts.
         </p>
       </section>
 

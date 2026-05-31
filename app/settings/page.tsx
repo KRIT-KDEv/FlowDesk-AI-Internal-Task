@@ -7,8 +7,8 @@ export default function SettingsPage() {
         <p className="text-sm font-medium text-accent">Workspace settings</p>
         <h1 className="text-3xl font-semibold">Settings</h1>
         <p className="mt-2 text-muted">
-          Simple placeholder settings for the demo workspace. Billing and
-          advanced permissions are intentionally not included.
+          Workspace settings preview for BrightAds Agency. Billing and advanced
+          permissions remain out of scope for this MVP.
         </p>
       </section>
 

@@ -78,7 +78,7 @@ export function RecentTasks({ tasks }: RecentTasksProps) {
           ))
         ) : (
           <div className="px-4 py-6 text-sm text-muted">
-            No recent tasks in BrightAds Agency.
+            No recent task updates yet. New or edited tasks will appear here.
           </div>
         )}
       </div>

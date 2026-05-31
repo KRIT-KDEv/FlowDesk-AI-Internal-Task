@@ -202,8 +202,8 @@ export default async function TasksPage({
         ) : (
           <div className="px-4 py-6 text-sm text-muted">
             {hasFilters
-              ? "No tasks match the current filters."
-              : "No tasks in the BrightAds Agency workspace."}
+              ? "No tasks match these filters. Try clearing search, status, or priority."
+              : "No tasks yet. Create the first BrightAds Agency task to start tracking work."}
           </div>
         )}
       </section>

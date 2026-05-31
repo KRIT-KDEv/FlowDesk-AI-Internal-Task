@@ -38,7 +38,7 @@ export function AiSummaryPreview({ summary }: AiSummaryPreviewProps) {
             {summary ? `${summaryTypeLabels[summary.type]} AI summary` : "AI summary"}
           </p>
           <h2 className="mt-1 text-base font-semibold">
-            {summary?.title ?? "Today focus"}
+            {summary?.title ?? "No summary yet"}
           </h2>
         </div>
         <Link href="/ai-summary" className="text-sm font-medium text-accent">
@@ -49,7 +49,7 @@ export function AiSummaryPreview({ summary }: AiSummaryPreviewProps) {
       <p className="mt-4 text-sm leading-6 text-muted">
         {summary
           ? getContentPreview(summary.content)
-          : "No AI summary generated yet"}
+          : "No AI summary preview is available yet."}
       </p>
 
       <div className="mt-5 grid gap-2 sm:grid-cols-3">

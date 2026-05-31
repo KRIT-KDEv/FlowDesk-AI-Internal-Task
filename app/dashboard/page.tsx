@@ -31,7 +31,8 @@ export default async function DashboardPage() {
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Operational snapshot for content, design, ads, and client work.
-            Built from the Prisma-backed BrightAds Agency demo workspace.
+            Powered by Prisma-backed task data for the BrightAds Agency
+            workspace.
           </p>
         </div>
         <div className="rounded-lg border border-border bg-panel px-4 py-3 text-sm shadow-sm">

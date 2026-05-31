@@ -56,8 +56,8 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
           <p className="text-sm font-medium text-accent">Task detail</p>
           <h1 className="mt-2 text-3xl font-semibold">Task not found</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-            This task could not be found in the BrightAds Agency workspace. It
-            may have been removed, or the task link may be incorrect.
+            This task is not available in BrightAds Agency. It may have been
+            removed, or the task link may be incorrect.
           </p>
           <Link
             className="mt-5 inline-flex rounded-md border border-border px-4 py-2 text-sm font-medium text-accent"
