@@ -30,7 +30,9 @@ export function AppSidebar() {
 
         <div className="mt-5 hidden rounded-lg border border-border bg-background px-3 py-3 lg:block">
           <p className="text-xs font-medium text-muted">MVP mode</p>
-          <p className="mt-1 text-sm font-semibold">Mock data workspace</p>
+          <p className="mt-1 text-sm font-semibold">
+            BrightAds Agency workspace
+          </p>
         </div>
 
         <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
@@ -57,7 +59,10 @@ export function AppSidebar() {
 
         <div className="mt-auto hidden border-t border-border pt-5 text-xs leading-5 text-muted lg:block">
           <p>Scope guard</p>
-          <p>No auth, database, Prisma, or live AI API in this MVP pass.</p>
+          <p>
+            Mock auth and AI preview remain. Task data runs server-side through
+            Prisma.
+          </p>
         </div>
       </div>
     </aside>

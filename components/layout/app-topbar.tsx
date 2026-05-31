@@ -18,7 +18,7 @@ export function AppTopbar() {
             Mock AI
           </span>
           <span className="rounded-full border border-border bg-background px-2.5 py-1">
-            No database
+            Prisma data
           </span>
         </div>
       </div>
