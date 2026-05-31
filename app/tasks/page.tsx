@@ -110,7 +110,7 @@ export default async function TasksPage({
           </Link>
         </div>
         <p className="mt-2 text-muted">
-          Read-only task list from the BrightAds Agency workspace.
+          Search, create, and review tasks from the BrightAds Agency workspace.
         </p>
       </section>
 

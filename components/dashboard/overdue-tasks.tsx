@@ -60,7 +60,7 @@ export function OverdueTasks({ tasks }: OverdueTasksProps) {
           ))
         ) : (
           <div className="px-4 py-6 text-sm text-muted">
-            No overdue tasks in the demo workspace.
+            No overdue tasks in BrightAds Agency.
           </div>
         )}
       </div>

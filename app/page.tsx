@@ -11,9 +11,8 @@ export default function HomePage() {
           BrightAds Agency workspace
         </h1>
         <p className="mt-3 max-w-2xl text-muted">
-          Day 2 placeholder shell for the internal task and workflow dashboard.
-          Use the dashboard routes to review the MVP structure before Day 3
-          layout work.
+          Manage BrightAds Agency tasks, deadlines, workload, and AI summary
+          previews from one internal dashboard.
         </p>
         <Link
           href="/dashboard"

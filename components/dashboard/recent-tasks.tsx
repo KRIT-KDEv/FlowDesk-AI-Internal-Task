@@ -78,7 +78,7 @@ export function RecentTasks({ tasks }: RecentTasksProps) {
           ))
         ) : (
           <div className="px-4 py-6 text-sm text-muted">
-            No recent tasks in the demo workspace.
+            No recent tasks in BrightAds Agency.
           </div>
         )}
       </div>
