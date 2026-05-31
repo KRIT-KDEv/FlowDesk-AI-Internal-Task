@@ -99,6 +99,17 @@ export type TaskFormAssigneeOption = {
   role: MemberRole
 }
 
+const boardStatusColumns = [
+  { status: "TODO", label: "Todo" },
+  { status: "IN_PROGRESS", label: "In Progress" },
+  { status: "REVIEW", label: "Review" },
+  { status: "DONE", label: "Done" },
+  { status: "BLOCKED", label: "Blocked" },
+] as const satisfies ReadonlyArray<{
+  status: TaskStatus
+  label: string
+}>
+
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -165,6 +176,25 @@ export async function getTaskListData(filters: GetTasksFilters = {}) {
 
   return {
     tasks,
+  }
+}
+
+export async function getBoardData(filters: GetTasksFilters = {}) {
+  const tasks = await getTasks(filters)
+  const tasksByStatus = new Map<TaskStatus, TaskListItem[]>(
+    boardStatusColumns.map((column) => [column.status, []])
+  )
+
+  for (const task of tasks) {
+    tasksByStatus.get(task.status)?.push(task)
+  }
+
+  return {
+    columns: boardStatusColumns.map((column) => ({
+      status: column.status,
+      label: column.label,
+      tasks: tasksByStatus.get(column.status) ?? [],
+    })),
   }
 }
 
