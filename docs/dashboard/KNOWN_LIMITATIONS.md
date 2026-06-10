@@ -19,23 +19,25 @@ The current MVP supports:
 - Create task through `createTaskAction()`
 - Task detail page from Prisma
 - Edit task through `updateTaskAction()`
+- Delete task from `/tasks/[id]` as a limited MVP demo-only hard delete flow
 - Read-only board
 - Read-only AI summary history
 - Read-only team workload
 - Read-only workspace settings
 
-Create Task and Edit Task are the current interactive task actions. The board,
-AI summary history, team workload, and workspace settings pages are read-only
-in the current MVP.
+Create Task, Edit Task, and the limited Delete Task flow are the current
+interactive task actions. Delete Task is available only from `/tasks/[id]`.
+The board, AI summary history, team workload, and workspace settings pages are
+read-only in the current MVP.
 
 ## 3. Page Status Matrix
 
 | Route | Current status | Interaction level | Safe demo claim | Limitation |
 | --- | --- | --- | --- | --- |
 | `/dashboard` | Prisma-backed dashboard overview | Read-only | Shows task/workflow visibility with metrics, recent work, overdue work, and latest saved AI summary preview. | No realtime updates and no live AI generation. |
-| `/tasks` | Prisma-backed task list with search/filter | Read-only | Users can review tasks and filter by title, status, or priority. | No bulk actions and no Delete Task. |
+| `/tasks` | Prisma-backed task list with search/filter | Read-only | Users can review tasks and filter by title, status, or priority. | No bulk actions and no Delete Task from the list. |
 | `/tasks/new` | Create Task page | Interactive create task | Users can create a task through `createTaskAction()`. | No Auth, Permission / Role Guard, or production access control. |
-| `/tasks/[id]` | Prisma-backed task detail | Read-only | Users can view task ownership, status, priority, due date, creator, workspace, and timestamps. | No comments, activity log, or Delete Task. |
+| `/tasks/[id]` | Prisma-backed task detail with limited Delete Task | Detail view plus MVP delete action | Users can view task ownership, status, priority, due date, creator, workspace, and timestamps. Users can delete a demo task after browser confirmation. | Delete is permanent hard delete; no Auth, Permission / Role Guard, restore, recycle bin, audit log, archive/soft delete, or multi-user safeguards. |
 | `/tasks/[id]/edit` | Edit Task page | Interactive edit task | Users can update editable task fields through `updateTaskAction()`. | No role-based approval, audit trail, or permission guard. |
 | `/board` | Prisma-backed workflow board | Read-only | Shows tasks grouped by Todo, In Progress, Review, Done, and Blocked. | No drag-and-drop and no board status mutation. |
 | `/ai-summary` | Prisma-backed AI summary history | Read-only | Shows saved AI summary history records. | Not live generation; OpenAI SDK is not integrated. |
@@ -44,12 +46,19 @@ in the current MVP.
 
 ## 4. Task Management Limitations
 
-- Delete Task is not enabled.
+- Delete Task is enabled only as a limited MVP demo-only hard delete flow from
+  `/tasks/[id]`.
+- Delete Task permanently removes the demo task after browser confirmation.
+- Delete Task is not available from `/tasks`, `/board`, `/tasks/[id]/edit`, or
+  bulk actions.
+- Delete Task does not include Auth, Permission / Role Guard, restore, recycle
+  bin, audit log, archive/soft delete, or multi-user safeguards.
+- Delete Task should not be described as production-safe.
 - Archive Task is not enabled.
 - Bulk actions are not enabled.
 - Advanced workflow transitions are not enabled.
-- Task creation and task editing are the main interactive task actions in the
-  current MVP.
+- Task creation, task editing, and the limited task detail delete flow are the
+  main interactive task actions in the current MVP.
 - Status changes should be described as happening through Edit Task, not through
   board drag-and-drop.
 
@@ -133,12 +142,14 @@ These claims are safe for demo, portfolio, and product discussion:
 - The dashboard shows task and workflow visibility.
 - The task list supports search/filter.
 - Users can create and edit tasks in the MVP.
+- Users can delete demo tasks only from `/tasks/[id]` through an MVP demo-only
+  hard delete flow with browser confirmation.
 - Board, AI summary history, team workload, and settings are available as
   read-only views.
 - The project is suitable as a portfolio-ready internal dashboard MVP and
   productized freelance dashboard concept.
-- The project has clear future-scope paths for Auth, Delete/Archive Task, Live
-  AI, permissions, integrations, and billing.
+- The project has clear future-scope paths for Auth, production-safe
+  archive/restore safeguards, Live AI, permissions, integrations, and billing.
 
 ## 13. Claims To Avoid
 
@@ -148,7 +159,9 @@ Do not claim:
 - Billing is implemented.
 - Live AI generation works.
 - OpenAI SDK is integrated.
-- Delete Task is available.
+- Delete Task is production-safe.
+- Delete Task includes Auth, Permission / Role Guard, restore, recycle bin,
+  audit log, archive/soft delete, or multi-user safeguards.
 - Permission or role guard is implemented.
 - RLS or tenant isolation is implemented.
 - Realtime updates are enabled.
@@ -165,7 +178,7 @@ add or complete:
 
 - Authentication
 - Permission / Role Guard
-- Delete or archive behavior
+- Production-safe delete or archive behavior
 - Data access rules, RLS, or equivalent isolation
 - Live AI generation if AI is part of the paid promise
 - Error handling and production QA
@@ -178,7 +191,7 @@ add or complete:
 
 Recommended future implementation order:
 
-1. Delete or Archive Task
+1. Production-safe archive/restore or delete safeguards
 2. Auth
 3. Permission / Role Guard
 4. Live AI Summary Generation
