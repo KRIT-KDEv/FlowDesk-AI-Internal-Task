@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { TaskDetailItem } from "@/lib/task-data";
 import { getTaskDetailData } from "@/lib/task-data";
+import { DeleteTaskForm } from "./delete-task-form";
 
 export const dynamic = "force-dynamic";
 
@@ -86,12 +87,15 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
               {getDisplayText(task.description, "No description provided.")}
             </p>
           </div>
-          <Link
-            className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
-            href={`/tasks/${task.id}/edit`}
-          >
-            Edit task
-          </Link>
+          <div className="flex flex-col gap-3 sm:items-end">
+            <Link
+              className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
+              href={`/tasks/${task.id}/edit`}
+            >
+              Edit task
+            </Link>
+            <DeleteTaskForm taskId={task.id} />
+          </div>
         </div>
       </section>
 
