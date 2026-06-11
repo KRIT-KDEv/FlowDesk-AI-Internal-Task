@@ -36,9 +36,9 @@ read-only in the current MVP.
 | --- | --- | --- | --- | --- |
 | `/dashboard` | Prisma-backed dashboard overview | Read-only | Shows task/workflow visibility with metrics, recent work, overdue work, and latest saved AI summary preview. | No realtime updates and no live AI generation. |
 | `/tasks` | Prisma-backed task list with search/filter | Read-only | Users can review tasks and filter by title, status, or priority. | No bulk actions and no Delete Task from the list. |
-| `/tasks/new` | Create Task page | Interactive create task | Users can create a task through `createTaskAction()`. | No Auth, Permission / Role Guard, or production access control. |
-| `/tasks/[id]` | Prisma-backed task detail with limited Delete Task | Detail view plus MVP delete action | Users can view task ownership, status, priority, due date, creator, workspace, and timestamps. Users can delete a demo task after browser confirmation. | Delete is permanent hard delete; no Auth, Permission / Role Guard, restore, recycle bin, audit log, archive/soft delete, or multi-user safeguards. |
-| `/tasks/[id]/edit` | Edit Task page | Interactive edit task | Users can update editable task fields through `updateTaskAction()`. | No role-based approval, audit trail, or permission guard. |
+| `/tasks/new` | Create Task page | Interactive create task | Admin and manager demo roles can create a task through `createTaskAction()`. | Demo role guard exists, but no production-grade Auth, workspace isolation, audit log, or production access control. |
+| `/tasks/[id]` | Prisma-backed task detail with limited Delete Task | Detail view plus MVP delete action | Users can view task ownership, status, priority, due date, creator, workspace, and timestamps. Admin can delete a demo task after browser confirmation. | Delete is permanent hard delete; demo role guard exists, but no production-grade Auth, restore, recycle bin, audit log, archive/soft delete, or multi-user safeguards. |
+| `/tasks/[id]/edit` | Edit Task page | Interactive edit task | Admin and manager demo roles can update editable task fields through `updateTaskAction()`. | Demo role guard exists, but no production-grade authorization, approval workflow, or audit trail. |
 | `/board` | Prisma-backed workflow board | Read-only | Shows tasks grouped by Todo, In Progress, Review, Done, and Blocked. | No drag-and-drop and no board status mutation. |
 | `/ai-summary` | Prisma-backed AI summary history | Read-only | Shows saved AI summary history records. | Not live generation; OpenAI SDK is not integrated. |
 | `/team` | Prisma-backed team workload overview | Read-only | Shows members and workload counts for visibility. | No invites, role management, or member management. |
@@ -64,14 +64,25 @@ read-only in the current MVP.
 
 ## 5. Authentication And Access Control Limitations
 
-- Authentication is not enabled.
-- Permission / Role Guard is not implemented.
-- Role-based access control is not implemented.
+- Demo Auth / Portfolio Auth is enabled for controlled portfolio walkthroughs.
+- Permission / Role Guard is enabled only as app-level demo role guard.
+- Server-side task mutation guards exist only for demo roles.
+- Demo roles are `admin`, `manager`, and `viewer`.
+- This is not production-grade authentication or authorization.
+- Database-backed users are not implemented.
+- A production Auth provider is not implemented.
+- Workspace / Organization isolation is not implemented.
+- Production-grade Role / Permission modeling is not implemented.
 - Invite flow is not implemented.
-- The current MVP should not be described as protected, multi-tenant, or
-  production-secure.
-- Any Auth, permission, invite, or role management work is future scope unless
-  explicitly planned and implemented in a later workstream.
+- Audit log is not implemented.
+- Archive / Soft Delete is not implemented.
+- Restore / Recycle Bin is not implemented.
+- Multi-user production safeguards are not implemented.
+- The current MVP should not be described as production-secure, multi-tenant, or
+  safe for real client data.
+- Any production Auth, invite, workspace isolation, audit log, or role management
+  work is future scope unless explicitly planned and implemented in a later
+  workstream.
 
 ## 6. Data Security And RLS Limitations
 
@@ -144,25 +155,32 @@ These claims are safe for demo, portfolio, and product discussion:
 - Users can create and edit tasks in the MVP.
 - Users can delete demo tasks only from `/tasks/[id]` through an MVP demo-only
   hard delete flow with browser confirmation.
+- Demo Auth / Portfolio Auth supports controlled portfolio walkthroughs.
+- App-level demo role guard limits route access, navigation, task action
+  visibility, and task mutation actions for `admin`, `manager`, and `viewer`.
 - Board, AI summary history, team workload, and settings are available as
   read-only views.
 - The project is suitable as a portfolio-ready internal dashboard MVP and
   productized freelance dashboard concept.
 - The project has clear future-scope paths for Auth, production-safe
-  archive/restore safeguards, Live AI, permissions, integrations, and billing.
+  production Auth, workspace isolation, archive/restore safeguards, Live AI,
+  integrations, and billing.
 
 ## 13. Claims To Avoid
 
 Do not claim:
 
-- Auth is implemented.
+- Production Auth is implemented.
 - Billing is implemented.
 - Live AI generation works.
 - OpenAI SDK is integrated.
 - Delete Task is production-safe.
-- Delete Task includes Auth, Permission / Role Guard, restore, recycle bin,
-  audit log, archive/soft delete, or multi-user safeguards.
-- Permission or role guard is implemented.
+- Delete Task includes production Auth, production permission safeguards,
+  restore, recycle bin, audit log, archive/soft delete, or multi-user
+  safeguards.
+- Production Permission / Role Guard is implemented.
+- Demo Auth is production-grade security.
+- Demo role guard provides tenant isolation or real multi-user protection.
 - RLS or tenant isolation is implemented.
 - Realtime updates are enabled.
 - API routes are available.
@@ -177,7 +195,9 @@ Before positioning FlowDesk AI as a production-ready system, the project should
 add or complete:
 
 - Authentication
-- Permission / Role Guard
+- Production-grade authorization / Role Guard
+- Database-backed users
+- Workspace / Organization isolation
 - Production-safe delete or archive behavior
 - Data access rules, RLS, or equivalent isolation
 - Live AI generation if AI is part of the paid promise
@@ -192,8 +212,8 @@ add or complete:
 Recommended future implementation order:
 
 1. Production-safe archive/restore or delete safeguards
-2. Auth
-3. Permission / Role Guard
+2. Production Auth provider and database-backed users
+3. Production-grade authorization / Role Guard
 4. Live AI Summary Generation
 5. Invite flow
 6. Realtime or notifications

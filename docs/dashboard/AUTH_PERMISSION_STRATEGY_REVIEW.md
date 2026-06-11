@@ -33,10 +33,11 @@ Current mutation flows:
 - Edit Task
 - Delete Task as a limited MVP demo-only hard delete from `/tasks/[id]`
 
-Still not enabled:
+Demo Auth / Portfolio Auth is now implemented after Workstream D D2-D4.
+Production Auth and production-grade permission hardening are still not enabled.
 
-- Auth
-- Permission / Role Guard
+Still not enabled for production:
+
 - RLS
 - Supabase Client
 - Invites
@@ -52,6 +53,33 @@ Still not enabled:
 
 The MVP should not be described as protected, production-secure,
 multi-tenant-secure, or production-ready.
+
+## Workstream D Implementation Status
+
+Workstream D D2-D4 implemented Demo Auth / Portfolio Auth for controlled
+portfolio walkthroughs.
+
+Implemented demo auth and app-level demo authorization:
+
+- `/login` demo role selection
+- Login/logout server actions
+- Cookie-based demo roles: `admin`, `manager`, and `viewer`
+- Logged-out route protection for protected MVP pages
+- Logged-in redirect from `/login` to `/dashboard`
+- Demo role-based route guard
+- Role-aware sidebar/navigation
+- Role-aware task action visibility
+- Server-side demo mutation guards for task create, edit, and delete actions
+
+Current demo mutation permissions:
+
+- `admin` can create, edit, and delete demo tasks.
+- `manager` can create and edit tasks, but cannot delete tasks.
+- `viewer` is read-only and cannot create, edit, or delete tasks.
+
+This is app-level demo authorization only. It is not production-grade Auth,
+database-backed identity, workspace isolation, tenant isolation, RLS, audit log,
+or multi-user production security.
 
 ## Demo Auth / Portfolio Auth vs Production Direction Auth
 
