@@ -4,6 +4,7 @@ import { TaskPriority, TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { requireDemoEditTaskPermission } from "@/lib/demo-auth-server";
 import { prisma } from "@/lib/prisma";
 
 const WORKSPACE_SLUG = "brightads-agency";
@@ -154,6 +155,8 @@ async function getValidAssigneeId(
 }
 
 export async function updateTaskAction(formData: FormData) {
+  requireDemoEditTaskPermission();
+
   const normalizedTaskId = getNormalizedTaskId(getFormString(formData, "taskId"));
   const task = await getTaskForUpdate(normalizedTaskId);
 

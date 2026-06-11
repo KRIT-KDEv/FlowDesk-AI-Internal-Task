@@ -56,8 +56,12 @@ export function canEditDemoTask(role: DemoRole) {
   return role === "admin" || role === "manager";
 }
 
-export function canShowDemoDeleteTaskAction(role: DemoRole) {
+export function canDeleteDemoTask(role: DemoRole) {
   return role === "admin";
+}
+
+export function canShowDemoDeleteTaskAction(role: DemoRole) {
+  return canDeleteDemoTask(role);
 }
 
 export function canViewDemoTeam(role: DemoRole) {

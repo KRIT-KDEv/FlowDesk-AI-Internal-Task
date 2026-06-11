@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { requireDemoDeleteTaskPermission } from "@/lib/demo-auth-server";
 import { prisma } from "@/lib/prisma";
 
 const uuidPattern =
@@ -67,6 +68,8 @@ async function hardDeleteTask(taskId: string) {
 }
 
 export async function deleteTaskAction(formData: FormData) {
+  requireDemoDeleteTaskPermission();
+
   const normalizedTaskId = getNormalizedTaskId(getFormString(formData, "taskId"));
   const task = await getTaskForDelete(normalizedTaskId);
 

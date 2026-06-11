@@ -1,6 +1,10 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import {
+  canCreateDemoTask,
+  canDeleteDemoTask,
+  canEditDemoTask,
   DEMO_AUTH_COOKIE_NAME,
   demoRoleLabels,
   isValidDemoRole,
@@ -42,4 +46,38 @@ export function logoutDemoUser() {
     maxAge: 0,
     path: "/"
   });
+}
+
+function redirectUnauthorizedMutation(): never {
+  redirect("/tasks");
+}
+
+export function requireDemoCreateTaskPermission() {
+  const demoSession = getDemoSession();
+
+  if (!demoSession || !canCreateDemoTask(demoSession.role)) {
+    redirectUnauthorizedMutation();
+  }
+
+  return demoSession;
+}
+
+export function requireDemoEditTaskPermission() {
+  const demoSession = getDemoSession();
+
+  if (!demoSession || !canEditDemoTask(demoSession.role)) {
+    redirectUnauthorizedMutation();
+  }
+
+  return demoSession;
+}
+
+export function requireDemoDeleteTaskPermission() {
+  const demoSession = getDemoSession();
+
+  if (!demoSession || !canDeleteDemoTask(demoSession.role)) {
+    redirectUnauthorizedMutation();
+  }
+
+  return demoSession;
 }

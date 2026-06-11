@@ -4,6 +4,7 @@ import { TaskPriority, TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { requireDemoCreateTaskPermission } from "@/lib/demo-auth-server";
 import { prisma } from "@/lib/prisma";
 
 const WORKSPACE_SLUG = "brightads-agency";
@@ -149,6 +150,8 @@ async function getValidAssigneeId(assigneeId: string, workspaceId: string) {
 }
 
 export async function createTaskAction(formData: FormData) {
+  requireDemoCreateTaskPermission();
+
   const title = getFormString(formData, "title");
 
   if (!title) {
