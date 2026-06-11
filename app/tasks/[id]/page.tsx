@@ -1,5 +1,10 @@
 import Link from "next/link";
 
+import {
+  canEditDemoTask,
+  canShowDemoDeleteTaskAction
+} from "@/lib/demo-auth";
+import { getDemoSession } from "@/lib/demo-auth-server";
 import type { TaskDetailItem } from "@/lib/task-data";
 import { getTaskDetailData } from "@/lib/task-data";
 import { DeleteTaskForm } from "./delete-task-form";
@@ -48,6 +53,7 @@ function getDisplayText(value: string | null | undefined, fallback: string) {
 }
 
 export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
+  const demoSession = getDemoSession();
   const data = await getTaskDetailData(params.id);
 
   if (!data) {
@@ -72,6 +78,10 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   }
 
   const { task } = data;
+  const canEditTask = demoSession ? canEditDemoTask(demoSession.role) : false;
+  const canShowDeleteTaskAction = demoSession
+    ? canShowDemoDeleteTaskAction(demoSession.role)
+    : false;
 
   return (
     <main className="space-y-6">
@@ -88,13 +98,17 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:items-end">
-            <Link
-              className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
-              href={`/tasks/${task.id}/edit`}
-            >
-              Edit task
-            </Link>
-            <DeleteTaskForm taskId={task.id} />
+            {canEditTask ? (
+              <Link
+                className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
+                href={`/tasks/${task.id}/edit`}
+              >
+                Edit task
+              </Link>
+            ) : null}
+            {canShowDeleteTaskAction ? (
+              <DeleteTaskForm taskId={task.id} />
+            ) : null}
           </div>
         </div>
       </section>

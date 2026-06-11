@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { TaskPriority, TaskStatus } from "@prisma/client";
 
+import { canCreateDemoTask } from "@/lib/demo-auth";
+import { getDemoSession } from "@/lib/demo-auth-server";
 import type { GetTasksFilters, TaskListItem } from "@/lib/task-data";
 import { getTaskListData } from "@/lib/task-data";
 
@@ -89,12 +91,14 @@ function getValidatedTaskFilters(
 export default async function TasksPage({
   searchParams = {}
 }: TasksPageProps) {
+  const demoSession = getDemoSession();
   const filters = getValidatedTaskFilters(searchParams);
   const { tasks } = await getTaskListData(filters);
   const searchValue = filters.search ?? "";
   const statusValue = filters.status ?? "";
   const priorityValue = filters.priority ?? "";
   const hasFilters = Boolean(filters.search || filters.status || filters.priority);
+  const canCreateTask = demoSession ? canCreateDemoTask(demoSession.role) : false;
 
   return (
     <main className="space-y-6">
@@ -102,15 +106,19 @@ export default async function TasksPage({
         <p className="text-sm font-medium text-accent">Task management</p>
         <div className="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-3xl font-semibold">Tasks</h1>
-          <Link
-            className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
-            href="/tasks/new"
-          >
-            New task
-          </Link>
+          {canCreateTask ? (
+            <Link
+              className="inline-flex h-10 items-center justify-center rounded-md bg-accent px-4 text-sm font-medium text-white"
+              href="/tasks/new"
+            >
+              New task
+            </Link>
+          ) : null}
         </div>
         <p className="mt-2 text-muted">
-          Search, create, and review tasks from the BrightAds Agency workspace.
+          {canCreateTask
+            ? "Search, create, and review tasks from the BrightAds Agency workspace."
+            : "Search and review tasks from the BrightAds Agency workspace."}
         </p>
       </section>
 

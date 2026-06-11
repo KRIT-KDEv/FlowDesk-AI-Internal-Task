@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { DemoSession } from "@/lib/demo-auth";
+import { canAccessDemoRoute, type DemoSession } from "@/lib/demo-auth";
 import { demoWorkspace } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +22,9 @@ type AppSidebarProps = {
 export function AppSidebar({ demoSession }: AppSidebarProps) {
   const pathname = usePathname();
   const isLoggedIn = Boolean(demoSession);
+  const visibleNavItems = demoSession
+    ? navItems.filter((item) => canAccessDemoRoute(demoSession.role, item.href))
+    : [];
 
   return (
     <aside className="border-border bg-panel/95 lg:fixed lg:inset-y-0 lg:left-0 lg:w-72 lg:border-r">
@@ -45,7 +48,7 @@ export function AppSidebar({ demoSession }: AppSidebarProps) {
 
         {isLoggedIn ? (
           <nav className="mt-5 flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
