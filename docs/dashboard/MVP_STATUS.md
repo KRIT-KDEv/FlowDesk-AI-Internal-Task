@@ -95,7 +95,7 @@ workload, or settings counts.
 ## 7. Hardcoded MVP Assumptions
 
 - BrightAds Agency workspace slug: `brightads-agency`
-- Seeded Admin user: `admin@brightads.example`
+- Seeded demo person/member record: `admin@brightads.example`
 - Server-side Prisma only
 - Demo Auth / Portfolio Auth only; no production Auth scoping yet
 - App-level demo role guard only; no production-grade authorization yet

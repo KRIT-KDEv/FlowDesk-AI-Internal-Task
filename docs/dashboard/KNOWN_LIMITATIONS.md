@@ -51,8 +51,9 @@ read-only in the current MVP.
 - Delete Task permanently removes the demo task after browser confirmation.
 - Delete Task is not available from `/tasks`, `/board`, `/tasks/[id]/edit`, or
   bulk actions.
-- Delete Task does not include Auth, Permission / Role Guard, restore, recycle
-  bin, audit log, archive/soft delete, or multi-user safeguards.
+- Delete Task does not include production Auth, production-grade Permission /
+  Role Guard, restore, recycle bin, audit log, archive/soft delete, or
+  production multi-user safeguards.
 - Delete Task should not be described as production-safe.
 - Archive Task is not enabled.
 - Bulk actions are not enabled.
