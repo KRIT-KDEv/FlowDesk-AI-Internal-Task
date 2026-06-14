@@ -13,8 +13,9 @@ known limitations as the source of truth.
 ## Current MVP Deployment Scope
 
 The current deployment scope is the FlowDesk AI MVP demo for the BrightAds
-Agency workspace. The app is still an unauthenticated MVP demo. It should not
-be described as protected, multi-tenant, or production-secure.
+Agency workspace. The app includes Demo Auth / Portfolio Auth for controlled
+portfolio walkthroughs. It should not be described as production-authenticated,
+multi-tenant, or production-secure.
 
 Demo deployment route scope:
 
@@ -23,15 +24,15 @@ Demo deployment route scope:
 | `/dashboard` | Prisma-backed | Read-only | Dashboard overview for metrics, recent tasks, overdue tasks, and latest saved AI summary preview. |
 | `/tasks` | Prisma-backed | Read-only | Task list with search and filter behavior. |
 | `/tasks/new` | Prisma-backed | Interactive create task | Creates tasks through `createTaskAction()`. |
-| `/tasks/[id]` | Prisma-backed | Read-only | Task detail page for a single task. |
+| `/tasks/[id]` | Prisma-backed | Detail + limited delete | Task detail page with admin-only MVP demo hard delete. |
 | `/tasks/[id]/edit` | Prisma-backed | Interactive edit task | Updates editable task fields through `updateTaskAction()`. |
 | `/board` | Prisma-backed | Read-only | Workflow board grouped by status; no drag-and-drop or board mutation. |
 | `/ai-summary` | Prisma-backed | Read-only | Saved AI summary history only; no live AI generation. |
 | `/team` | Prisma-backed | Read-only | Team workload visibility only. |
 | `/settings` | Prisma-backed | Read-only | Workspace settings and MVP status snapshot only. |
 
-Create Task and Edit Task are the only mutation-capable flows in the current
-MVP. All other pages should be presented as read-only demo views.
+Create Task, Edit Task, and limited Delete Task are the mutation-capable flows
+in the current MVP. All other pages should be presented as read-only demo views.
 
 ## Deployment Blockers
 
@@ -39,9 +40,11 @@ No app changes were made during this audit. The following items should be
 treated as deployment blockers or verification needs before a public demo or
 production-style deployment:
 
-- **Auth and access control are not enabled.** The app should not be deployed as
-  a protected production system until Auth and Permission / Role Guard are
-  scoped and implemented.
+- **Production Auth and access control are not enabled.** Demo Auth and demo
+  role guards are available for controlled walkthroughs, but the app should not
+  be deployed as a protected production system until production Auth,
+  workspace isolation, and production Permission / Role Guard are scoped and
+  implemented.
 - **Environment configuration needs verification.** Production or demo hosting
   must define required environment variables in the hosting provider dashboard.
   Real values must never be committed or exposed.
@@ -100,17 +103,26 @@ run in B1.
 
 The following features are intentionally not enabled in the current MVP:
 
-- Delete Task
-- Auth
-- Permission / Role Guard
+- Production Auth
+- Database-backed users
+- Workspace / Organization isolation
+- Production-grade Permission / Role Guard
 - RLS
 - Supabase Client
 - Live AI generation
+- OpenAI/Gemini API integration
 - OpenAI SDK
 - Invites
 - Billing
 - Realtime
 - API routes
+- Archive / Soft Delete
+- Restore / Recycle Bin
+- Audit Log
+- Multi-user production safeguards
+
+Demo Auth / Portfolio Auth, app-level demo role guard, demo mutation guard, and
+limited MVP demo-only Delete Task are enabled only for controlled walkthroughs.
 
 Demo language should make these boundaries clear. The app can be presented as a
 Prisma-backed internal workflow dashboard MVP, but it should not be presented as
@@ -135,14 +147,15 @@ Recommended checks for later phases:
 - Confirm required hosting environment variables are configured without
   exposing values.
 - Confirm database connectivity and demo data availability.
-- Confirm create and edit task flows work in the deployment target.
+- Confirm create, edit, and limited admin delete task flows work in the
+  deployment target for the intended demo roles.
 - Confirm unsupported features are not accidentally presented as enabled.
 
 ## Risk Matrix
 
 | Risk | Impact | Current status | Recommended next phase |
 | --- | --- | --- | --- |
-| Missing Auth and access control | Public or client-facing deployment would not be protected. | Not enabled in MVP | Scope Auth and Permission / Role Guard in a future security workstream. |
+| Missing production Auth and access control | Public or client-facing deployment would not be production protected. | Demo Auth only; production Auth not enabled | Scope production Auth, workspace isolation, and Permission / Role Guard in a future security workstream. |
 | Missing RLS or tenant isolation | The app should not be described as production-grade multi-tenant software. | Not enabled in MVP | Define access isolation requirements before production use. |
 | Database and environment configuration not verified | Deployed pages may fail if `DATABASE_URL`, `DIRECT_URL`, or database reachability are incorrect. | Needs verification | Verify hosting environment variables and database connectivity in B2. |
 | Build and route smoke tests not run in B1 | Deployment readiness cannot be fully confirmed from documentation alone. | Needs verification | Run lint, build, and route checks in B2. |

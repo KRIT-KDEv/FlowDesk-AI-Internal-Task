@@ -5,9 +5,9 @@
 This guide documents safe demo and portfolio deployment steps for the current
 FlowDesk AI Internal Task Dashboard MVP.
 
-It is not a production hardening guide. The current MVP remains an
-unauthenticated demo/portfolio app, and this guide should not be used to claim
-production readiness or production-grade security.
+It is not a production hardening guide. The current MVP uses Demo Auth /
+Portfolio Auth for controlled walkthroughs, and this guide should not be used
+to claim production readiness or production-grade security.
 
 ## Deployment Scope
 
@@ -18,7 +18,7 @@ The demo deployment scope includes these MVP routes:
 | `/dashboard` | Prisma-backed dashboard overview | Read-only |
 | `/tasks` | Prisma-backed task list with search/filter | Read-only |
 | `/tasks/new` | Create Task flow through `createTaskAction()` | Interactive |
-| `/tasks/[id]` | Prisma-backed task detail | Read-only |
+| `/tasks/[id]` | Prisma-backed task detail with limited admin demo delete | Detail + limited delete |
 | `/tasks/[id]/edit` | Edit Task flow through `updateTaskAction()` | Interactive |
 | `/board` | Prisma-backed workflow board | Read-only |
 | `/ai-summary` | Prisma-backed AI summary history | Read-only |
@@ -27,10 +27,12 @@ The demo deployment scope includes these MVP routes:
 
 Deployment scope notes:
 
-- `/tasks/new` and `/tasks/[id]/edit` are the current interactive task flows.
+- `/tasks/new`, `/tasks/[id]/edit`, and limited admin Delete Task from
+  `/tasks/[id]` are the current interactive task flows.
 - `/board`, `/ai-summary`, `/team`, and `/settings` are read-only in the
   current MVP.
-- The app remains unauthenticated MVP demo scope.
+- The app uses Demo Auth / Portfolio Auth for controlled portfolio
+  walkthroughs.
 - Do not describe this deployment as production-secure, protected, or complete
   SaaS.
 
@@ -128,6 +130,8 @@ manually after a deployment is available.
 - [ ] Visit `/tasks/new` and confirm the Create Task page loads.
 - [ ] Create a safe demo task from `/tasks/new` if the demo database is ready.
 - [ ] Visit `/tasks/[id]` for a real task and confirm task detail loads.
+- [ ] If signed in as admin, confirm the limited Delete Task UI appears only
+      from task detail and is presented as demo-only hard delete.
 - [ ] Visit `/tasks/[id]/edit` for a real task and confirm the Edit Task page
       loads.
 - [ ] Edit a safe demo task only if the demo database is ready.
@@ -138,27 +142,36 @@ manually after a deployment is available.
       exist.
 - [ ] Visit `/settings` and confirm workspace settings/status data appears.
 - [ ] Confirm read-only pages do not imply unavailable write features.
-- [ ] Confirm no demo copy claims Auth, Delete Task, Live AI, Billing, RLS,
-      Realtime, Invites, or API routes are enabled.
+- [ ] Confirm no demo copy claims production Auth, production-safe Delete Task,
+      Live AI, Billing, RLS, Realtime, Invites, or API routes are enabled.
 
 ## Unsupported Feature Warning
 
 The following features are not enabled in the current MVP:
 
-- Delete Task
-- Auth
-- Permission / Role Guard
+- Production Auth
+- Database-backed users
+- Workspace / Organization isolation
+- Production-grade Permission / Role Guard
 - RLS
 - Supabase Client
 - Live AI generation
+- OpenAI/Gemini API integration
 - OpenAI SDK
 - Invites
 - Billing
 - Realtime
 - API routes
+- Archive / Soft Delete
+- Restore / Recycle Bin
+- Audit Log
+- Multi-user production safeguards
 
 These features should not be claimed during demos, portfolio walkthroughs,
 deployment notes, or product/package discussions.
+
+Demo Auth / Portfolio Auth, app-level demo role guard, demo mutation guard, and
+limited MVP demo-only Delete Task are enabled only for controlled walkthroughs.
 
 ## Rollback Notes
 
@@ -180,7 +193,7 @@ FlowDesk AI now has a documented deployment guide for safe demo and portfolio
 hosting.
 
 This does not mean the app is production-secure or production-ready. The current
-MVP remains an unauthenticated demo with clear read-only boundaries and
-not-enabled feature limits.
+MVP remains a demo-authenticated portfolio app with clear read-only boundaries
+and not-enabled production feature limits.
 
 The project is ready to proceed to B5 Final Deployment Readiness Checklist.

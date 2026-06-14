@@ -16,11 +16,12 @@ The MVP demonstrates:
 - Team workload overview
 - AI summary history
 - Prisma-backed data access
-- Create Task and Edit Task workflows
+- Create Task, Edit Task, and limited Delete Task workflows
+- Demo Auth / Portfolio Auth for controlled walkthroughs
 
-Live AI generation, Auth, Billing, Delete Task, Permission / Role Guard, RLS,
-Realtime, Invites, Supabase Client, OpenAI SDK, and API routes are not enabled
-in the current MVP.
+Live AI generation, OpenAI/Gemini API integration, Production Auth, Billing,
+production-grade Permission / Role Guard, RLS, Realtime, Invites, Supabase
+Client, OpenAI SDK, and API routes are not enabled in the current MVP.
 
 ## 2. Problem
 
@@ -60,6 +61,8 @@ The goal is to create a simple internal dashboard that helps teams:
 
 The MVP intentionally focuses on workflow visibility before advanced SaaS
 features such as Auth, Billing, Realtime, or live AI generation.
+Demo Auth / Portfolio Auth is included only for controlled portfolio
+walkthroughs and should not be described as production security.
 
 ## 5. MVP Scope
 
@@ -70,6 +73,8 @@ The current MVP supports:
 - Create task through `createTaskAction()`
 - Task detail from Prisma
 - Edit task through `updateTaskAction()`
+- Limited Delete Task from `/tasks/[id]`
+- Demo Auth / Portfolio Auth with admin, manager, and viewer roles
 - Read-only board
 - Read-only AI summary history
 - Read-only team workload
@@ -78,6 +83,8 @@ The current MVP supports:
 Create Task and Edit Task are the current interactive task actions. Board, AI
 summary history, team workload, and workspace settings are read-only in the
 current MVP.
+Admin can also delete demo tasks from task detail through a limited hard delete
+flow.
 
 ## 6. Implemented Features
 
@@ -110,6 +117,20 @@ The Edit Task flow is implemented through `/tasks/[id]/edit` and
 `updateTaskAction()`. Users can update editable task fields such as title,
 description, status, priority, due date, and assignee.
 
+### Limited Task Deletion
+
+Admin can delete a demo task from `/tasks/[id]` through a limited MVP
+demo-only hard delete flow. It has browser confirmation, but it does not include
+archive/soft delete, restore, recycle bin, audit log, or production multi-user
+safeguards.
+
+### Demo Auth And Role Guard
+
+Demo Auth / Portfolio Auth supports controlled walkthroughs with `admin`,
+`manager`, and `viewer` roles. Admin can create, edit, and delete demo tasks;
+manager can create and edit; viewer is read-only. This is app-level demo
+guarding, not production-grade authentication or authorization.
+
 ### Read-only Board
 
 The board groups Prisma-backed tasks by status. It is read-only in the current
@@ -123,13 +144,13 @@ generation is not enabled, and OpenAI SDK is not integrated.
 ### Read-only Team Workload
 
 The Team page shows members and workload counts for visibility. It does not
-include invites, member management, permissions, or role guard behavior.
+include invites, member management, or production role management.
 
 ### Read-only Workspace Settings
 
 The Settings page shows workspace information, counts, and MVP status. It is
 read-only and does not include billing, editable settings, or permission
-controls.
+controls for production use.
 
 ### Prisma-backed Data Layer
 
@@ -165,10 +186,12 @@ At a high level, FlowDesk AI uses:
 - TypeScript for safer development
 - Prisma-backed data access for database reads and task mutations
 - Server Actions for create and update task workflows
+- Demo Auth / Portfolio Auth for controlled walkthroughs
 - App routes for dashboard and task views
 
-The MVP does not use Supabase Client, Supabase Auth, OpenAI SDK, Stripe,
-Realtime, or API routes as implemented technologies.
+The MVP does not use Supabase Client, production Auth providers, OpenAI/Gemini
+API integration, OpenAI SDK, Stripe, Realtime, or API routes as implemented
+technologies.
 
 ## 9. Data Model Overview
 
@@ -208,24 +231,29 @@ This model is intentionally small so the MVP stays clear and demo-ready.
 ## 11. Product Decisions
 
 - The MVP focuses on dashboard visibility before advanced SaaS features.
-- Auth, Billing, Realtime, Invites, and Permission / Role Guard are deferred
-  because they require product, security, and scope decisions.
+- Production Auth, Billing, Realtime, Invites, and production-grade Permission /
+  Role Guard are deferred because they require product, security, and scope
+  decisions.
 - AI is positioned as saved summary history now and live AI generation later.
 - Product tiers and pricing/package ideas are documented before building
   Billing so the business model can be validated before technical investment.
-- Delete or Archive Task is a practical future workflow feature, but Delete
-  Task is not enabled in the current MVP.
+- Production-safe archive/restore safeguards remain future scope even though a
+  limited MVP demo-only Delete Task flow exists.
 
 ## 12. Known Limitations
 
 Current limitations:
 
-- Delete Task is not enabled.
-- Auth is not enabled.
-- Permission / Role Guard is not implemented.
+- Delete Task is limited to MVP demo-only hard delete from `/tasks/[id]`.
+- Demo Auth / Portfolio Auth is enabled only for controlled walkthroughs.
+- Demo role guard and demo mutation guard are enabled only at app level.
+- Production Auth is not enabled.
+- Database-backed users are not implemented.
+- Production-grade Permission / Role Guard is not implemented.
 - RLS is not implemented.
 - Supabase Client is not enabled.
 - Live AI generation is not enabled.
+- OpenAI/Gemini API integration is not connected.
 - OpenAI SDK is not integrated.
 - Invites are not implemented.
 - Billing is not implemented.
@@ -234,15 +262,15 @@ Current limitations:
 - Board, AI summary history, team workload, and settings are read-only.
 
 The MVP should not be described as protected, multi-tenant, realtime,
-AI-generating, billing-enabled, or production-ready SaaS.
+AI-generating, billing-enabled, production-secure, or production-ready SaaS.
 
 ## 13. Future Roadmap
 
 Practical future phases:
 
-1. Delete or Archive Task
-2. Authentication
-3. Permission / Role Guard
+1. Archive / Soft Delete and restore safeguards
+2. Production Auth and database-backed users
+3. Production-grade Permission / Role Guard
 4. Live AI summary generation
 5. Invite/team management
 6. Realtime notifications or updates
@@ -268,11 +296,13 @@ concept.
 ## 15. Resume Bullets
 
 - Built a Prisma-backed internal task dashboard MVP with task list filtering,
-  task creation, task detail, and task edit workflows.
+  task creation, task detail, task edit, and limited demo delete workflows.
 - Designed read-only workflow board, team workload, workspace settings, and AI
   summary history views to support demo-ready product storytelling.
 - Implemented server-side create and update task workflows with clear MVP
   boundaries and future-scope documentation.
+- Added Demo Auth / Portfolio Auth with admin, manager, and viewer roles for
+  controlled portfolio walkthroughs.
 - Created product documentation covering demo script, demo data, product tiers,
   known limitations, and portfolio positioning.
 - Framed the project as a productized freelance dashboard concept with honest
@@ -286,5 +316,6 @@ workload, and prepare for AI-assisted reporting.
 
 The project is intentionally transparent about its limitations. It is not a
 production-ready SaaS product yet, but it is a strong foundation for future
-workstreams such as Delete or Archive Task, Auth, Permission / Role Guard, Live
-AI, Invites, Realtime, and Billing after product validation.
+workstreams such as archive/restore safeguards, Production Auth, production
+Permission / Role Guard, Live AI, Invites, Realtime, and Billing after product
+validation.

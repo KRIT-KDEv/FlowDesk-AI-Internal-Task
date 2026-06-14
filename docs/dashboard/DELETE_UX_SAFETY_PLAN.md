@@ -5,6 +5,10 @@
 This document defines the UX and safety plan for a later Delete Task
 implementation in FlowDesk AI.
 
+Historical note: this document was created before Delete Task implementation.
+Delete Task was later implemented as a limited MVP demo-only hard delete flow
+from `/tasks/[id]`.
+
 This is Phase C2 of Workstream C. It is documentation-only and does not enable
 delete behavior, create a delete server action, add a Delete button, change app
 behavior, or modify the Prisma schema.

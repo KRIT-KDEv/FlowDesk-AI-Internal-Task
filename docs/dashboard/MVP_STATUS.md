@@ -6,12 +6,14 @@ This document captures the current FlowDesk MVP Core checkpoint.
 
 The MVP is a Prisma-backed internal workflow dashboard for the BrightAds Agency
 demo workspace. The app now has database-backed dashboard, task, board, AI
-summary, team, and settings views. Create Task and Edit Task are enabled as the
-only mutation-capable flows.
+summary, team, and settings views. Create Task, Edit Task, and limited
+MVP demo-only Delete Task are enabled as mutation-capable flows.
 
-This checkpoint is not a production-readiness signoff. Auth, permissions, RLS,
-live AI generation, billing, realtime, invites, API routes, and Delete Task are
-still intentionally out of scope.
+This checkpoint is not a production-readiness signoff. Demo Auth / Portfolio
+Auth and app-level demo role guards are enabled for controlled walkthroughs,
+but production Auth, database-backed users, workspace isolation, RLS, live AI
+generation, billing, realtime, invites, and API routes remain intentionally out
+of scope.
 
 ## 2. Route Map
 
@@ -19,9 +21,9 @@ still intentionally out of scope.
 | --- | --- | --- | --- | --- |
 | `/dashboard` | `getDashboardData()` from `lib/dashboard-data.ts` | Yes | Read-only | Shows saved database data only; no live AI generation. |
 | `/tasks` | `getTaskListData()` from `lib/task-data.ts` | Yes | Read-only | Search/filter are read-only; no bulk actions or delete. |
-| `/tasks/new` | `getCreateTaskFormData()` and `createTaskAction()` | Yes | Mutation-capable | Uses seeded BrightAds Agency workspace and Admin user; no auth. |
-| `/tasks/[id]` | `getTaskDetailData()` from `lib/task-data.ts` | Yes | Read-only | Detail view only; edit is a separate route and delete is disabled. |
-| `/tasks/[id]/edit` | `getEditTaskFormData()` and `updateTaskAction()` | Yes | Mutation-capable | Updates only editable task fields; no role guard. |
+| `/tasks/new` | `getCreateTaskFormData()` and `createTaskAction()` | Yes | Mutation-capable | Demo mutation guard allows admin/manager only; still no production Auth. |
+| `/tasks/[id]` | `getTaskDetailData()` from `lib/task-data.ts` plus `deleteTaskAction()` | Yes | Detail + limited delete | Admin can hard-delete demo tasks from detail only; no archive, restore, or audit log. |
+| `/tasks/[id]/edit` | `getEditTaskFormData()` and `updateTaskAction()` | Yes | Mutation-capable | Demo mutation guard allows admin/manager only; no production authorization. |
 | `/board` | `getBoardData()` from `lib/task-data.ts` | Yes | Read-only | No drag-and-drop or status mutation from the board. |
 | `/ai-summary` | `getAISummaryPageData()` from `lib/ai-summary-data.ts` | Yes | Read-only | Displays saved summaries only; no live AI generation. |
 | `/team` | `getTeamPageData()` from `lib/team-data.ts` | Yes | Read-only | Workload view only; no invites, permissions, or member management. |
@@ -34,10 +36,12 @@ still intentionally out of scope.
 - Task detail page
 - Create Task flow
 - Edit Task flow
+- Limited Delete Task flow from task detail
 - Board read-only task grouping by status
 - AI Summary read-only saved records
 - Team workload read-only member and task counts
 - Settings read-only workspace, counts, and MVP status
+- Demo Auth / Portfolio Auth with admin, manager, and viewer roles
 
 ## 4. Mutation Boundaries
 
@@ -45,7 +49,13 @@ still intentionally out of scope.
   `app/tasks/new/actions.ts`.
 - Edit Task is enabled through `updateTaskAction()` in
   `app/tasks/[id]/edit/actions.ts`.
-- Delete Task is not enabled.
+- Delete Task is enabled through `deleteTaskAction()` in
+  `app/tasks/[id]/actions.ts` as a limited MVP demo-only hard delete from
+  `/tasks/[id]`.
+- Demo mutation guards are enabled:
+  - admin can create, edit, and delete
+  - manager can create and edit only
+  - viewer is read-only
 - No other mutation routes, API routes, or unrelated server actions are part of
   the MVP checkpoint.
 
@@ -64,25 +74,31 @@ workload, or settings counts.
 
 ## 6. Not Enabled Yet
 
-- Delete Task
-- Auth
-- Permissions / Role Guard
+- Production Auth
+- Database-backed users
+- Workspace / Organization isolation
+- Production-grade Permissions / Role Guard
 - RLS
 - Supabase Client
 - Live AI generation
+- OpenAI/Gemini API integration
 - OpenAI SDK
 - Invites
 - Billing
 - Realtime
 - API routes
+- Archive / Soft Delete
+- Restore / Recycle Bin
+- Audit Log
+- Multi-user production safeguards
 
 ## 7. Hardcoded MVP Assumptions
 
 - BrightAds Agency workspace slug: `brightads-agency`
 - Seeded Admin user: `admin@brightads.example`
 - Server-side Prisma only
-- No auth scoping yet
-- No role guard yet
+- Demo Auth / Portfolio Auth only; no production Auth scoping yet
+- App-level demo role guard only; no production-grade authorization yet
 
 These assumptions are acceptable for the MVP demo checkpoint, but they should be
 revisited before production use or multi-workspace use.
@@ -112,5 +128,5 @@ revisited before production use or multi-workspace use.
 - Keep features scoped to one workstream at a time.
 - Keep database access server-side through Prisma until a new security plan is
   explicitly approved.
-- Do not add Supabase Client, Auth, RLS, live AI, API routes, or Delete Task
-  outside their dedicated workstreams.
+- Do not add Supabase Client, production Auth, RLS, live AI, API routes, or
+  production delete/archive safeguards outside their dedicated workstreams.

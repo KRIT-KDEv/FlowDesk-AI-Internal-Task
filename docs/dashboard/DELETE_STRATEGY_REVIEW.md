@@ -5,6 +5,10 @@
 This document compares safe Delete Task strategy options for the FlowDesk AI
 Internal Task Dashboard.
 
+Historical note: this document was created before Delete Task implementation.
+Delete Task was later implemented as a limited MVP demo-only hard delete flow
+from `/tasks/[id]`.
+
 It is a planning document for Workstream C. It does not enable Delete Task,
 change app behavior, modify Prisma schema, run migrations, or create any
 database behavior.

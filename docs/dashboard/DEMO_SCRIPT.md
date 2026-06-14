@@ -7,7 +7,8 @@ ownership, workload awareness, and reporting clarity.
 
 The goal is to make the viewer understand the product quickly: a team lead can
 open one dashboard, see what work is active or overdue, create and update tasks,
-review workload, and reference saved AI summary history.
+review workload, reference saved AI summary history, and demonstrate portfolio
+demo roles.
 
 ## 2. Target Audience
 
@@ -22,9 +23,9 @@ review workload, and reference saved AI summary history.
 FlowDesk AI is currently an MVP, not a finished SaaS product.
 
 The demo focuses on Prisma-backed workflow visibility, task tracking, team
-workload overview, and AI summary history. It is designed to show a realistic
-product foundation and portfolio-ready workflow, while staying transparent
-about what is not enabled yet.
+workload overview, Demo Auth / Portfolio Auth, and AI summary history. It is
+designed to show a realistic product foundation and portfolio-ready workflow,
+while staying transparent about what is not enabled yet.
 
 Live AI generation is not enabled in the current MVP. The AI Summary area shows
 saved AI summary history only.
@@ -35,13 +36,13 @@ saved AI summary history only.
 | --- | --- | --- | --- | --- | --- |
 | Opening problem | N/A | Brief setup before screen walkthrough. | Small teams often lose track of ownership, deadlines, and reporting because work is spread across chat, spreadsheets, and manual updates. | N/A | Keep the problem practical and avoid claiming this replaces every operations tool. |
 | Dashboard | `/dashboard` | Metrics, recent tasks, overdue tasks, latest AI summary preview. | This is the executive snapshot: what is active, overdue, due today, and recently updated. | Read-only | Say Prisma-backed data. Do not claim realtime updates. |
-| Task list | `/tasks` | Task table, search, status filter, priority filter. | The task list lets the team review work and narrow down what needs attention. | Read-only | Search/filter are available, but bulk actions and delete are not enabled. |
-| Create task | `/tasks/new` | New task form with title, description, status, priority, due date, assignee. | This is one of the current interactive flows: creating a task through a server-side action. | Interactive | Do not claim auth or permissions decide who can create tasks. |
-| Task detail | `/tasks/[id]` | Detail fields, assignee, creator, workspace, dates. | Each task has a clear detail page for ownership and status review. | Read-only | Edit is separate; Delete Task is not enabled. |
-| Edit task | `/tasks/[id]/edit` | Edit form and validation message area. | This is the second interactive flow: updating task fields like status, priority, due date, and assignee. | Interactive | Do not claim role guard or approval workflow. |
+| Task list | `/tasks` | Task table, search, status filter, priority filter. | The task list lets the team review work and narrow down what needs attention. | Read-only | Search/filter are available, but bulk actions and list delete are not enabled. |
+| Create task | `/tasks/new` | New task form with title, description, status, priority, due date, assignee. | This is one of the current interactive flows: creating a task through a server-side action for allowed demo roles. | Interactive | Demo role guard exists, but do not claim production authorization. |
+| Task detail | `/tasks/[id]` | Detail fields, assignee, creator, workspace, dates, limited admin delete action. | Each task has a clear detail page for ownership and status review. | Detail + limited delete | Delete is MVP demo-only hard delete; no archive, restore, or audit log. |
+| Edit task | `/tasks/[id]/edit` | Edit form and validation message area. | This is an interactive flow: updating task fields like status, priority, due date, and assignee for allowed demo roles. | Interactive | Do not claim production role guard or approval workflow. |
 | Board | `/board` | Columns grouped by status. | The board gives a workflow view grouped by Todo, In Progress, Review, Done, and Blocked. | Read-only | Drag-and-drop and board status mutation are not enabled. |
 | AI Summary | `/ai-summary` | Saved AI summary cards. | This page shows saved AI summary history for reporting context. | Read-only | Live AI generation is not enabled. |
-| Team | `/team` | Member cards and workload counts. | The team view helps a lead see task ownership and workload distribution. | Read-only | Invites, member management, permissions, and role management are not enabled. |
+| Team | `/team` | Member cards and workload counts. | The team view helps a lead see task ownership and workload distribution. | Read-only | Invites, member management, and production role management are not enabled. |
 | Settings | `/settings` | Workspace info, counts, MVP status. | Settings is a transparent read-only snapshot of workspace data and MVP boundaries. | Read-only | No editable settings, billing, or permission controls. |
 | Closing summary | N/A | Return to dashboard or tasks. | FlowDesk AI is a demo-ready MVP for task visibility, workflow tracking, and AI-ready reporting. | N/A | Emphasize MVP foundation and future scope. |
 
@@ -76,8 +77,8 @@ saved AI summary history only.
    date, and assignee. If doing a live demo, create a simple task with a clear
    title.
 
-   Say: "Create Task is one of the two enabled interactive task actions in the
-   current MVP."
+   Say: "Create Task is one of the enabled interactive task actions for admin
+   and manager demo roles in the current MVP."
 
 5. **Show `/tasks/[id]`**
 
@@ -87,14 +88,19 @@ saved AI summary history only.
 
    Say: "The detail page makes ownership and workflow status explicit."
 
+   If signed in as admin, point out the limited Delete Task action and say:
+   "Delete is a demo-only hard delete from task detail. It does not include
+   archive, restore, recycle bin, audit log, or production multi-user
+   safeguards."
+
 6. **Show `/tasks/[id]/edit`**
 
    Open the edit page and explain that the user can update editable task fields.
    Show status, priority, due date, and assignee as the most demo-friendly
    fields.
 
-   Say: "Edit Task is enabled, but Delete Task and role-based permissions are
-   not enabled in this MVP."
+   Say: "Edit Task is enabled for admin and manager demo roles. Viewer is a
+   read-only demo role."
 
 7. **Show `/board`**
 
@@ -151,7 +157,7 @@ saved AI summary history only.
 - **Purpose:** Let users review workspace tasks and narrow the list by search,
   status, or priority.
 - **Already implemented:** Prisma-backed task list with search/filter.
-- **Not enabled yet:** Bulk actions and Delete Task.
+- **Not enabled yet:** Bulk actions and Delete Task from the list.
 - **Best demo line:** "This is where operational work becomes searchable and
   reviewable instead of scattered across chat."
 
@@ -159,8 +165,8 @@ saved AI summary history only.
 
 - **Purpose:** Create a new internal work item.
 - **Already implemented:** Create Task form and `createTaskAction()`.
-- **Not enabled yet:** Auth-based creator selection, role guard, and permission
-  checks.
+- **Not enabled yet:** Production auth, database-backed users, and production
+  permission checks.
 - **Best demo line:** "This is one of the two interactive MVP flows: adding a
   new task to the workspace."
 
@@ -168,8 +174,10 @@ saved AI summary history only.
 
 - **Purpose:** Show the full task context.
 - **Already implemented:** Prisma-backed task detail with status, priority,
-  due date, assignee, creator, workspace, and timestamps.
-- **Not enabled yet:** Delete Task, comments, activity log, and permissions.
+  due date, assignee, creator, workspace, timestamps, and limited admin demo
+  Delete Task.
+- **Not enabled yet:** Comments, activity log, archive/restore, audit log, and
+  production permissions.
 - **Best demo line:** "The detail page gives each task a single source of truth
   for ownership and status."
 
@@ -177,7 +185,7 @@ saved AI summary history only.
 
 - **Purpose:** Update editable task fields.
 - **Already implemented:** Edit Task form and `updateTaskAction()`.
-- **Not enabled yet:** Delete Task, role guard, approval workflow, and audit
+- **Not enabled yet:** Production role guard, approval workflow, and audit
   trail.
 - **Best demo line:** "This is the second interactive MVP flow: updating task
   status, priority, due date, and assignee."
@@ -204,7 +212,8 @@ saved AI summary history only.
 
 - **Purpose:** Show workload by team member.
 - **Already implemented:** Prisma-backed read-only member and workload counts.
-- **Not enabled yet:** Invites, member management, permissions, and role guard.
+- **Not enabled yet:** Invites, member management, and production role
+  management.
 - **Best demo line:** "This helps a lead see who owns work and where workload
   pressure is building."
 
@@ -212,8 +221,8 @@ saved AI summary history only.
 
 - **Purpose:** Show workspace information, counts, and MVP status.
 - **Already implemented:** Prisma-backed read-only workspace settings page.
-- **Not enabled yet:** Editable settings, billing, permissions, and live AI
-  controls.
+- **Not enabled yet:** Editable settings, billing, production permissions, and
+  live AI controls.
 - **Best demo line:** "This page makes the MVP boundaries transparent."
 
 ## 7. Demo Do / Don't
@@ -224,16 +233,19 @@ saved AI summary history only.
 - Say "AI summary history."
 - Say "read-only" for `/board`, `/ai-summary`, `/team`, and `/settings`.
 - Say "MVP" and "future scope" clearly.
-- Say Create Task and Edit Task are the current interactive task actions.
+- Say Demo Auth / Portfolio Auth is for controlled walkthroughs only.
+- Say admin can create/edit/delete, manager can create/edit, and viewer is
+  read-only.
+- Say Delete Task is a limited MVP demo-only hard delete from `/tasks/[id]`.
 
 ### Don't
 
 - Do not claim live AI generation.
-- Do not claim authentication.
+- Do not claim production authentication.
 - Do not claim billing.
-- Do not claim permissions or role guard.
+- Do not claim production permissions or production role guard.
 - Do not claim realtime updates.
-- Do not claim Delete Task is available.
+- Do not claim Delete Task is production-safe or recoverable.
 - Do not imply the read-only board supports drag-and-drop.
 
 ## 8. Closing Pitch
@@ -242,7 +254,7 @@ saved AI summary history only.
 
 FlowDesk AI is a portfolio-ready internal dashboard MVP that demonstrates
 dashboard UX, Prisma-backed data, task CRUD workflow for create/edit, read-only
-workflow views, and clear product scope management.
+workflow views, Demo Auth / Portfolio Auth, and clear product scope management.
 
 ### Freelance Client
 
@@ -252,6 +264,7 @@ reporting context.
 
 ### Future Product Direction
 
-The current MVP is a stable foundation for future workstreams such as Delete
-Task, authentication, permissions, deployment readiness, and live AI summary
-generation.
+The current MVP is a stable foundation for future workstreams such as
+archive/restore safeguards, production authentication, production permissions,
+deployment readiness, and live AI summary generation as an optional client
+add-on.

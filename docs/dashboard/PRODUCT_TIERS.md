@@ -27,7 +27,9 @@ The current MVP includes:
 - Dashboard overview
 - Task list with search/filter
 - Create Task and Edit Task flows
+- Limited MVP demo-only Delete Task from task detail
 - Task detail pages
+- Demo Auth / Portfolio Auth with admin, manager, and viewer roles
 - Read-only workflow board
 - Read-only AI summary history
 - Read-only team workload view
@@ -42,8 +44,8 @@ yet a finished production SaaS product.
 | --- | --- |
 | Package name | FlowDesk AI MVP Demo |
 | Target user | Portfolio reviewers, freelance prospects, small teams evaluating an internal dashboard concept |
-| Included features | Dashboard overview, task list/search/filter, Create Task, Task detail, Edit Task, read-only board, read-only AI summary history, read-only team workload, read-only settings, Prisma-backed data layer |
-| Not included | Delete Task, Auth, Permission / Role Guard, RLS, Supabase Client, Live AI generation, OpenAI SDK, Invites, Billing, Realtime, API routes |
+| Included features | Dashboard overview, task list/search/filter, Create Task, Task detail, Edit Task, limited MVP demo-only Delete Task, Demo Auth / Portfolio Auth, read-only board, read-only AI summary history, read-only team workload, read-only settings, Prisma-backed data layer |
+| Not included | Production Auth, database-backed users, workspace isolation, production-grade Permission / Role Guard, RLS, Supabase Client, Live AI generation, OpenAI/Gemini API integration, OpenAI SDK, Invites, Billing, Realtime, API routes, archive/soft delete, restore, audit log |
 | Best use case | Demonstrating a polished MVP foundation for internal task visibility and workflow tracking |
 | Demo readiness | Ready for portfolio and product discovery conversations, with MVP limitations stated clearly |
 
@@ -111,15 +113,15 @@ plans.
 | Pages/features | Limited dashboard and task pages | Dashboard, task list, task detail, create task, edit task, board, team workload, report/summary page | Custom pages, custom workflows, reporting, integrations |
 | Customization level | Low | Medium | High |
 | AI support | Not included by default; future scope | Planned/custom add-on unless implemented later | Scoped custom feature if required |
-| Auth/roles | Not included by default; planned/custom scope | Basic auth/role planning possible as add-on; implementation is separate scope | Permission planning and role design may be included if scoped; implementation is not enabled in the current MVP |
+| Auth/roles | Demo Auth only; production Auth is custom scope | Demo role planning exists; production auth/roles are separate scope | Permission planning and role design may be included if scoped; production implementation is not enabled in the current MVP |
 | Integrations | Not included by default | Light integrations as add-ons | Custom integrations by requirements |
 | Estimated price range | 8,000 - 15,000 THB | 20,000 - 35,000 THB | 40,000 - 80,000+ THB |
 | Delivery complexity | Low | Medium | High |
 
-Billing, Auth, Permission / Role Guard, Live AI, Realtime, API routes,
-Supabase Client, and RLS are not implemented in the current MVP. They should be
-treated as planned, custom, or future scope unless a later workstream implements
-them.
+Billing, Production Auth, production-grade Permission / Role Guard, Live AI,
+Realtime, API routes, Supabase Client, and RLS are not implemented in the
+current MVP. They should be treated as planned, custom, or future scope unless a
+later workstream implements them.
 
 ## 6. Scope Included vs Not Included
 
@@ -135,9 +137,9 @@ them.
 
 ### Not Included By Default
 
-- Authentication
-- Role-based permission
-- Delete Task
+- Production Authentication
+- Production role-based permission
+- Production-safe archive/restore or delete safeguards
 - Live AI generation
 - OpenAI SDK integration
 - Billing/subscription system
@@ -155,9 +157,9 @@ phases after the base workflow is confirmed.
 
 | Add-on | Description | Complexity | Dependencies / risks |
 | --- | --- | --- | --- |
-| Authentication setup | Add user sign-in and session handling. | High | Requires auth provider decision, security review, protected routes, and environment setup. |
-| Role/permission guard | Restrict actions by owner/admin/member role. | High | Depends on Auth and clear permission rules. Avoid promising before workflow is mapped. |
-| Delete/archive task behavior | Add safe task deletion or archive behavior. | Medium | Needs product decision: hard delete vs archive, recovery behavior, and audit expectations. |
+| Production authentication setup | Add production user sign-in and session handling. | High | Requires auth provider decision, security review, protected routes, and environment setup. Current Demo Auth is not production security. |
+| Production role/permission guard | Restrict actions by owner/admin/member role for real users. | High | Depends on production Auth and clear permission rules. Avoid promising before workflow is mapped. |
+| Archive/restore task safeguards | Add production-safe task archive, restore, or delete behavior. | Medium | Current Delete Task is demo-only hard delete; production scope needs recovery behavior and audit expectations. |
 | Live AI summary generation | Generate daily/weekly summaries from task data. | High | Requires AI provider, prompt design, cost controls, logging, and error handling. |
 | OpenAI SDK integration | Add model calls through an AI integration layer. | High | Depends on live AI scope, secrets management, rate limits, and output safety. |
 | Export report | Export dashboard or summary data as a report. | Medium | Requires output format decision: PDF, CSV, Excel, or email-friendly text. |
@@ -180,7 +182,7 @@ Recommended policy:
 - Avoid adding features without scope review.
 - Put advanced features into add-ons.
 - Confirm data model impact before implementation.
-- Do not promise Auth, Billing, Realtime, or AI unless scoped.
+- Do not promise production Auth, Billing, Realtime, or AI unless scoped.
 - Do not treat a demo MVP as production-ready without a production checklist.
 
 The safest sales posture is to sell a clear base dashboard, then scope advanced
@@ -214,15 +216,15 @@ workload in one place.
 ### Small Business Owner
 
 This dashboard concept helps replace scattered manual updates with a clearer
-internal workflow view. The first version can stay simple, then add Auth,
-permissions, AI, notifications, or integrations only when the business case is
-clear.
+internal workflow view. The first version can stay simple, then add production
+Auth, production permissions, AI, notifications, or integrations only when the
+business case is clear.
 
 ## 11. Risks and Boundaries
 
 - Over-scoping a small dashboard into a full internal system.
 - Underpricing custom workflow, integrations, or permission logic.
-- Selling SaaS promises before Auth and Billing are implemented.
+- Selling SaaS promises before production Auth and Billing are implemented.
 - Claiming live AI before integration exists.
 - Not separating the demo MVP from a production-ready system.
 - Adding advanced features before the client workflow is confirmed.
@@ -234,8 +236,8 @@ Recommended next steps after Workstream A:
 
 - Keep the current MVP as the demo/portfolio version.
 - Use these product tiers for pricing conversations and scope framing.
-- Prioritize Auth, Delete/Archive Task, and Live AI only when moving toward
-  production.
+- Prioritize production Auth, archive/restore safeguards, and Live AI only when
+  moving toward production or paid custom scope.
 - Avoid building Billing before validating client interest.
 - Keep advanced features in add-on scope until a real client workflow requires
   them.

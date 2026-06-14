@@ -6,8 +6,8 @@ This checklist summarizes final readiness for safe demo and portfolio
 deployment of the FlowDesk AI Internal Task Dashboard MVP.
 
 This is not a production readiness checklist. It does not claim that FlowDesk AI
-is production-secure, authenticated, multi-tenant, billing-ready, realtime, or
-ready for real client data.
+is production-secure, production-authenticated, multi-tenant, billing-ready,
+realtime, or ready for real client data.
 
 ## Workstream B Completion Summary
 
@@ -25,17 +25,17 @@ ready for real client data.
 | --- | --- | --- | --- |
 | `/dashboard` | Prisma-backed dashboard overview | Loads overview data for metrics, recent tasks, overdue work, and latest saved AI summary preview. | Needs deployed smoke test |
 | `/tasks` | Prisma-backed task list with search/filter | Shows task list and filtering UI. | Needs deployed smoke test |
-| `/tasks/new` | Interactive Create Task flow | Creates a safe demo task when the demo database is ready. | Needs deployed smoke test |
-| `/tasks/[id]` | Prisma-backed task detail | Shows detail for an existing real demo task. | Needs deployed smoke test |
-| `/tasks/[id]/edit` | Interactive Edit Task flow | Updates editable fields for a safe demo task. | Needs deployed smoke test |
+| `/tasks/new` | Interactive Create Task flow | Admin/manager demo roles create a safe demo task when the demo database is ready. | Needs deployed smoke test |
+| `/tasks/[id]` | Prisma-backed task detail with limited Delete Task | Shows detail for an existing real demo task; admin can use limited demo hard delete. | Needs deployed smoke test |
+| `/tasks/[id]/edit` | Interactive Edit Task flow | Admin/manager demo roles update editable fields for a safe demo task. | Needs deployed smoke test |
 | `/board` | Prisma-backed read-only board | Shows tasks grouped by status without drag-and-drop or board mutation. | Yes, within MVP scope; needs deployed smoke test |
 | `/ai-summary` | Prisma-backed read-only AI summary history | Shows saved AI summary history only, not live AI generation. | Yes, within MVP scope; needs deployed smoke test |
 | `/team` | Prisma-backed read-only team workload | Shows team workload visibility only. | Yes, within MVP scope; needs deployed smoke test |
 | `/settings` | Prisma-backed read-only workspace settings | Shows workspace details, counts, and MVP status only. | Yes, within MVP scope; needs deployed smoke test |
 
-The current interactive task flows are `/tasks/new` and `/tasks/[id]/edit`.
-Board, AI summary history, team workload, and settings are read-only in the
-current MVP.
+The current interactive task flows are `/tasks/new`, `/tasks/[id]/edit`, and
+limited admin Delete Task from `/tasks/[id]`. Board, AI summary history, team
+workload, and settings are read-only in the current MVP.
 
 ## Environment Readiness Checklist
 
@@ -95,7 +95,8 @@ seed commands, or database commands.
 - [ ] Pricing and product discussion matches `docs/dashboard/PRODUCT_TIERS.md`
       and `docs/dashboard/KNOWN_LIMITATIONS.md`.
 - [ ] Read-only pages are described as read-only.
-- [ ] App is described as an unauthenticated MVP demo.
+- [ ] App is described as a Demo Auth / Portfolio Auth MVP for controlled
+      walkthroughs.
 - [ ] No claims are made about production security.
 - [ ] No claims are made about RLS or tenant isolation.
 - [ ] No claims are made about billing or subscriptions being implemented.
@@ -109,17 +110,26 @@ seed commands, or database commands.
 
 | Feature | Current status | Demo wording |
 | --- | --- | --- |
-| Delete Task | Not enabled | Do not claim as implemented. |
-| Auth | Not enabled | Do not claim as implemented. |
-| Permission / Role Guard | Not enabled | Do not claim as implemented. |
+| Limited Delete Task | Demo-only hard delete from `/tasks/[id]` | Do not claim as production-safe, recoverable, archived, or audited. |
+| Demo Auth / Portfolio Auth | Enabled for controlled walkthroughs | Do not claim as production authentication. |
+| Demo role guard / mutation guard | Enabled at app level for demo roles | Do not claim as production RBAC, tenant-safe access control, or multi-user production safeguards. |
+| Production Auth | Not enabled | Do not claim as implemented. |
+| Database-backed users | Not enabled | Do not claim as implemented. |
+| Workspace / Organization isolation | Not enabled | Do not claim as implemented. |
+| Production Permission / Role Guard | Not enabled | Do not claim as implemented. |
 | RLS | Not enabled | Do not claim as implemented. |
 | Supabase Client | Not enabled | Do not claim as implemented. |
 | Live AI generation | Not enabled | Do not claim as implemented. |
+| OpenAI/Gemini API integration | Not enabled | Do not claim as implemented. |
 | OpenAI SDK | Not enabled | Do not claim as implemented. |
 | Invites | Not enabled | Do not claim as implemented. |
 | Billing | Not enabled | Do not claim as implemented. |
 | Realtime | Not enabled | Do not claim as implemented. |
 | API routes | Not enabled | Do not claim as implemented. |
+| Archive / Soft Delete | Not enabled | Do not claim as implemented. |
+| Restore / Recycle Bin | Not enabled | Do not claim as implemented. |
+| Audit Log | Not enabled | Do not claim as implemented. |
+| Multi-user production safeguards | Not enabled | Do not claim as implemented. |
 
 ## Final Go / No-Go Notes
 
@@ -153,6 +163,6 @@ hosting environment variables, database readiness, and post-deploy smoke tests
 are verified.
 
 The project is not production-ready or production-secure. Future production
-work should be handled separately with explicit scope for Auth, permissions,
-data access isolation, security review, deployment operations, monitoring, and
-support.
+work should be handled separately with explicit scope for production Auth,
+production permissions, data access isolation, security review, deployment
+operations, monitoring, and support.

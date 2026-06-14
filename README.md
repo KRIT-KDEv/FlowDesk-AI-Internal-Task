@@ -5,8 +5,8 @@ freelancers, and agencies that need clearer visibility into work ownership,
 deadlines, task status, and team workload.
 
 The current MVP uses Prisma-backed database access for core dashboard and task
-data. It includes saved AI summary history, but live AI generation is not
-enabled yet.
+data. It includes Demo Auth / Portfolio Auth for controlled walkthroughs and
+saved AI summary history, but live AI generation is not enabled yet.
 
 ## Product Overview
 
@@ -43,10 +43,12 @@ server-side data access:
 - Create task
 - Task detail
 - Edit task
+- Limited MVP demo-only Delete Task from task detail
 - Read-only workflow board
 - Read-only AI summary history
 - Read-only team workload
 - Read-only workspace settings
+- Demo Auth / Portfolio Auth with admin, manager, and viewer roles
 
 ## Implemented Features
 
@@ -55,27 +57,35 @@ server-side data access:
 - Create task
 - Task detail page
 - Edit task
+- Limited Delete Task from `/tasks/[id]`
 - Board view, read-only
 - AI summary history, read-only
 - Team workload, read-only
 - Workspace settings, read-only
 - Prisma-backed data layer
+- Demo role guard and demo mutation guard
 
 ## Not Enabled Yet
 
 The following features are not enabled in the current MVP:
 
-- Delete Task
-- Authentication
-- Permission / Role Guard
+- Production Auth
+- Database-backed users
+- Workspace / Organization isolation
+- Production-grade Permission / Role Guard
 - RLS
 - Supabase Client
 - Live AI generation
+- OpenAI/Gemini API integration
 - OpenAI SDK
 - Invites
 - Billing
 - Realtime
 - API routes
+- Archive / Soft Delete
+- Restore / Recycle Bin
+- Audit Log
+- Multi-user production safeguards
 
 ## Demo Pages
 
@@ -83,9 +93,9 @@ The following features are not enabled in the current MVP:
 | --- | --- | --- |
 | `/dashboard` | Shows Prisma-backed metrics, recent tasks, overdue tasks, and latest saved AI summary preview. | Read-only |
 | `/tasks` | Lists Prisma-backed tasks with title search, status filter, and priority filter. | Read-only |
-| `/tasks/new` | Provides the Create Task form and creates tasks through a Server Action. | Interactive |
-| `/tasks/[id]` | Shows Prisma-backed task detail, including status, priority, due date, assignee, creator, and workspace. | Read-only |
-| `/tasks/[id]/edit` | Provides the Edit Task form and updates editable task fields through a Server Action. | Interactive |
+| `/tasks/new` | Provides the Create Task form and creates tasks through a Server Action for allowed demo roles. | Interactive |
+| `/tasks/[id]` | Shows Prisma-backed task detail and limited admin demo Delete Task. | Detail + limited delete |
+| `/tasks/[id]/edit` | Provides the Edit Task form and updates editable task fields through a Server Action for allowed demo roles. | Interactive |
 | `/board` | Groups Prisma-backed tasks by workflow status. | Read-only |
 | `/ai-summary` | Shows saved AI summary records from the database. | Read-only |
 | `/team` | Shows Prisma-backed team members and workload counts. | Read-only |
@@ -98,11 +108,12 @@ The following features are not enabled in the current MVP:
 - TypeScript
 - Tailwind CSS
 - Prisma
-- Server Actions for Create Task and Edit Task
+- Server Actions for Create Task, Edit Task, and limited Delete Task
+- Demo-only cookie auth for controlled portfolio walkthroughs
 - Database access through Prisma
 
-Supabase Client, Supabase Auth, OpenAI, Stripe, Billing, Realtime, and API
-routes are not implemented in the current MVP.
+Supabase Client, production Auth, OpenAI/Gemini API integration, Stripe,
+Billing, Realtime, and API routes are not implemented in the current MVP.
 
 ## Local Setup
 
@@ -135,14 +146,16 @@ planned for a database workstream.
 ## Project Documentation
 
 - [MVP Status](docs/dashboard/MVP_STATUS.md)
+- [Known Limitations](docs/dashboard/KNOWN_LIMITATIONS.md)
+- [Portfolio Case Study](docs/dashboard/PORTFOLIO_CASE_STUDY.md)
+- [Demo Script](docs/dashboard/DEMO_SCRIPT.md)
+- [Product Tiers](docs/dashboard/PRODUCT_TIERS.md)
 
-Planned future docs:
+Additional planning docs:
 
-- `docs/dashboard/DEMO_SCRIPT.md`
-- `docs/dashboard/PRODUCT_TIERS.md`
-- `docs/dashboard/KNOWN_LIMITATIONS.md`
-- `docs/dashboard/PORTFOLIO_CASE_STUDY.md`
 - `docs/dashboard/DEMO_DATA_PLAN.md`
+- `docs/dashboard/DEPLOYMENT_READINESS_CHECKLIST.md`
+- `docs/dashboard/AUTH_PERMISSION_STRATEGY_REVIEW.md`
 
 ## Portfolio Positioning
 
@@ -156,3 +169,7 @@ This project can be presented as:
 The project is intentionally transparent about what is implemented and what is
 planned future scope, making it suitable for portfolio review, demo discussion,
 and product discovery conversations.
+
+Demo roles are available for portfolio walkthroughs: admin can create, edit,
+and delete demo tasks; manager can create and edit; viewer is read-only. This
+is not production-grade authentication or authorization.
