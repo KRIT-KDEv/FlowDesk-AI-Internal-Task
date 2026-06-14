@@ -1,243 +1,384 @@
-# FlowDesk AI Product Tiers
+# FlowDesk AI Client Offer / Product Tiers
 
-## 1. Purpose
+## 1. Purpose Of The Offer Document
 
-This document defines proposed product and service packages for presenting
-FlowDesk AI as:
+This document packages FlowDesk AI for freelance client discussions, Fastwork
+service planning, portfolio presentation, and future custom dashboard scoping.
 
-- A portfolio case study
-- A productized freelance dashboard offer
-- A future SaaS concept
+It separates three things:
 
-Billing is not implemented in the current MVP. These tiers are planning and
-positioning references only. Price ranges are draft planning estimates, not
-final quotes, contracts, or implemented billing plans.
+- The current demo-ready dashboard foundation.
+- Suggested freelance service tiers.
+- Paid add-ons that require separate scope, budget, and implementation.
 
-These product tiers are freelance/service packages. They are not in-app
-subscription tiers.
+The price ranges in this document are example planning ranges only. They are
+not final quotes, guaranteed packages, in-app subscription plans, or billing
+plans implemented in the app. Final pricing should be adjusted based on client
+requirements, deployment scope, data sensitivity, integrations, timeline,
+maintenance needs, and production hardening expectations.
 
-## 2. Product Positioning
+## 2. Current MVP Package
 
-FlowDesk AI is an internal task and workflow dashboard for small teams that
-need better visibility, ownership, workload tracking, and reporting clarity.
+The current FlowDesk AI MVP is a portfolio-ready and demo-ready internal task
+dashboard foundation. It is suitable for showing the product direction and for
+starting client discovery, but it should not be used with real production client
+data without additional paid hardening.
 
-The current MVP includes:
-
-- Prisma-backed task tracking
-- Dashboard overview
-- Task list with search/filter
-- Create Task and Edit Task flows
-- Limited MVP demo-only Delete Task from task detail
-- Task detail pages
-- Demo Auth / Portfolio Auth with admin, manager, and viewer roles
-- Read-only workflow board
-- Read-only AI summary history
-- Read-only team workload view
-- Read-only workspace settings
-
-The product is useful as a demo-ready internal dashboard foundation. It is not
-yet a finished production SaaS product.
-
-## 3. Current MVP Package
-
-| Field | Current MVP package |
+| Area | Current MVP status |
 | --- | --- |
-| Package name | FlowDesk AI MVP Demo |
-| Target user | Portfolio reviewers, freelance prospects, small teams evaluating an internal dashboard concept |
-| Included features | Dashboard overview, task list/search/filter, Create Task, Task detail, Edit Task, limited MVP demo-only Delete Task, Demo Auth / Portfolio Auth, read-only board, read-only AI summary history, read-only team workload, read-only settings, Prisma-backed data layer |
-| Not included | Production Auth, database-backed users, workspace isolation, production-grade Permission / Role Guard, RLS, Supabase Client, Live AI generation, OpenAI/Gemini API integration, OpenAI SDK, Invites, Billing, Realtime, API routes, archive/soft delete, restore, audit log |
-| Best use case | Demonstrating a polished MVP foundation for internal task visibility and workflow tracking |
-| Demo readiness | Ready for portfolio and product discovery conversations, with MVP limitations stated clearly |
+| Package name | FlowDesk AI Dashboard Foundation |
+| Positioning | AI-ready internal task dashboard MVP for small-team workflow visibility |
+| Data access | Prisma-backed dashboard and task data |
+| Task workflows | Task list with search/filter, create task, task detail, edit task, and limited MVP demo-only hard delete from `/tasks/[id]` |
+| Demo auth | Demo Auth / Portfolio Auth for controlled walkthroughs |
+| Demo roles | `admin`, `manager`, and `viewer` |
+| Demo mutation guard | `admin` can create/edit/delete; `manager` can create/edit only; `viewer` is read-only |
+| Read-only views | Board, AI summary history, team workload, and workspace settings |
+| AI status | Read-only saved AI summary/history page only; live AI generation is not enabled |
+| Production status | Not production-secure and not production-ready SaaS |
 
-This is the current implemented MVP state. It should not be presented as a paid
-production-ready package without additional scoping, production hardening, and
-client-specific requirements review.
+## 3. Who This Is For
 
-## 4. Proposed Product Tiers
+FlowDesk AI is a good fit for early conversations with:
 
-### Tier 1: Starter Internal Dashboard
+- Small business owners who need clearer internal task visibility.
+- Freelancers or solo operators managing repeatable client work.
+- Small agencies coordinating content, design, ads, and client follow-ups.
+- Operations or admin teams replacing scattered spreadsheets and chat updates.
+- Portfolio reviewers evaluating full-stack dashboard, product, and scoping work.
 
-| Field | Details |
-| --- | --- |
-| Suggested price range | 8,000 - 15,000 THB |
-| Best for | Small teams, solo operators, small shops, simple internal tracking |
-| Main value | A focused dashboard for task visibility and basic workflow tracking |
-| Included by default | Limited dashboard pages, task tracking, basic workflow visibility, simple deployment support, basic documentation |
-| Not included by default | Live AI, complex roles, billing, realtime, advanced integrations, custom approval flows |
+The current MVP is best used as a starting point for a custom client
+implementation, not as a finished production system.
 
-This tier is best when the client needs a simple internal tool and the workflow
-is already clear. It should stay small and avoid custom complexity.
+## 4. What Is Included In The Current Dashboard Foundation
 
-### Tier 2: Pro Workflow Dashboard
+The current dashboard foundation includes:
 
-| Field | Details |
-| --- | --- |
-| Suggested price range | 20,000 - 35,000 THB |
-| Best for | Small businesses or operations teams that need clearer workflow tracking |
-| Main value | A fuller internal operations dashboard with more workflow and reporting context |
-| Included by default | Dashboard, task list, task detail, create task, and edit task workflows; workflow board; team workload overview; report/summary page; basic admin setup; documentation |
-| Custom scope | Custom fields if scoped as part of the client workflow |
-| AI support | AI summary can be positioned as a planned/custom add-on unless implemented later |
-| Not included by default | Billing, realtime, complex permission systems, external integrations, live AI unless scoped |
+- Prisma-backed dashboard overview.
+- Prisma-backed task list with search/filter.
+- Create Task flow through `createTaskAction()`.
+- Task detail page.
+- Edit Task flow through `updateTaskAction()`.
+- Limited MVP demo-only Delete Task from `/tasks/[id]`.
+- Demo Auth / Portfolio Auth with `admin`, `manager`, and `viewer` roles.
+- App-level demo role guard for routes and navigation.
+- Server-side demo mutation guards for task create/edit/delete actions.
+- Read-only workflow board.
+- Read-only saved AI summary/history page.
+- Read-only team workload page.
+- Read-only workspace settings page.
+- Product, demo, pricing, deployment, and limitation documentation.
 
-This tier fits teams that need a stronger internal workflow dashboard, but still
-do not need a fully custom internal system.
+## 5. What Is Not Included In The Current MVP
 
-### Tier 3: Custom Internal System
+The current MVP does not include:
 
-| Field | Details |
-| --- | --- |
-| Suggested price range | 40,000 - 80,000+ THB |
-| Best for | Teams with custom workflow, approval flows, reporting, integrations, or multi-role access |
-| Main value | A tailored internal system designed around a specific business workflow |
-| Included by default | Custom workflow design, database modeling, dashboards, permission planning, integrations, deployment consultation, documentation |
-| Scope note | Actual scope depends on requirements, data complexity, feedback speed, and integration needs |
+- Live AI generation.
+- OpenAI/Gemini API integration.
+- Production Auth.
+- Database-backed users.
+- Workspace or organization isolation.
+- Production role-based access control.
+- RLS.
+- Supabase Client.
+- Invites.
+- Billing or in-app subscription plans.
+- Realtime collaboration.
+- API routes.
+- Archive / Soft Delete.
+- Restore / Recycle Bin.
+- Audit Log.
+- Multi-user production safeguards.
 
-This tier should always begin with workflow discovery. It should not be priced
-or promised as a simple dashboard if the client needs permissions,
-integrations, custom data models, or production-grade operations.
+Delete Task is currently a limited MVP demo-only hard delete flow. It does not
+include archive, soft delete, restore, recycle bin, audit log, or production
+multi-user safeguards.
 
-Role-based permission implementation is not enabled in the current MVP. Any
-permission planning or implementation must be scoped separately.
+## 6. Suggested Freelance Service Tiers
 
-## 5. Tier Comparison Table
+These tiers are service/package planning references. They are not active
+subscription tiers inside the application.
 
-These are service/package tiers for freelance or productized project planning.
-They are not in-app subscription tiers, and they are not enabled in-app billing
-plans.
-
-| Category | Starter Internal Dashboard | Pro Workflow Dashboard | Custom Internal System |
+| Tier | Example planning range | Best fit | Core outcome |
 | --- | --- | --- | --- |
-| Target user | Solo operator, small shop, very small team | Small business, operations team, admin team | Team with custom workflows or integrations |
-| Main value | Basic task visibility | Workflow tracking and reporting clarity | Tailored internal operations system |
-| Pages/features | Limited dashboard and task pages | Dashboard, task list, task detail, create task, edit task, board, team workload, report/summary page | Custom pages, custom workflows, reporting, integrations |
-| Customization level | Low | Medium | High |
-| AI support | Not included by default; future scope | Planned/custom add-on unless implemented later | Scoped custom feature if required |
-| Auth/roles | Demo Auth only; production Auth is custom scope | Demo role planning exists; production auth/roles are separate scope | Permission planning and role design may be included if scoped; production implementation is not enabled in the current MVP |
-| Integrations | Not included by default | Light integrations as add-ons | Custom integrations by requirements |
-| Estimated price range | 8,000 - 15,000 THB | 20,000 - 35,000 THB | 40,000 - 80,000+ THB |
-| Delivery complexity | Low | Medium | High |
+| Starter Internal Dashboard | 8,000 - 15,000 THB | Solo operators, small shops, small teams | Simple internal task visibility |
+| Workflow Dashboard Customization | 20,000 - 35,000 THB | Small businesses and agency teams | Custom workflow dashboard based on the MVP foundation |
+| Production-Ready Custom System | 40,000 - 80,000+ THB | Teams with real users, sensitive data, integrations, or complex operations | Production-oriented internal system with custom hardening |
 
-Billing, Production Auth, production-grade Permission / Role Guard, Live AI,
-Realtime, API routes, Supabase Client, and RLS are not implemented in the
-current MVP. They should be treated as planned, custom, or future scope unless a
-later workstream implements them.
+Final scope should always be confirmed through workflow discovery before
+pricing is treated as a quote.
 
-## 6. Scope Included vs Not Included
+## 7. Tier 1: Starter Internal Dashboard
 
-### Included By Default
+**Example planning range:** 8,000 - 15,000 THB
 
-- Dashboard pages
-- Task tracking
-- Basic workflow status
-- Prisma-backed data structure
-- Demo data setup/planning
-- Basic deployment guidance
-- Documentation
+Best for small teams, solo operators, small shops, or simple internal tracking
+needs.
 
-### Not Included By Default
+Typical scope:
 
-- Production Authentication
-- Production role-based permission
-- Production-safe archive/restore or delete safeguards
-- Live AI generation
-- OpenAI SDK integration
-- Billing/subscription system
-- Realtime collaboration
-- Invite system
-- Supabase Client/RLS
-- External API integrations
-- Mobile app
-- Advanced PDF/Excel export
+- Basic dashboard and task pages.
+- Task list, task detail, create task, and edit task workflows.
+- Simple status and priority tracking.
+- Basic demo role setup if needed for walkthroughs.
+- Light branding and copy adjustments.
+- Basic deployment guidance.
+- Short usage documentation.
 
-These items should be handled as add-ons, future scope, or separate project
-phases after the base workflow is confirmed.
+Not included by default:
 
-## 7. Add-On Menu
+- Live AI generation.
+- Production Auth or database-backed users.
+- Complex permissions.
+- Billing.
+- Realtime.
+- External integrations.
+- Archive/restore safeguards.
+- Advanced reporting.
 
-| Add-on | Description | Complexity | Dependencies / risks |
-| --- | --- | --- | --- |
-| Production authentication setup | Add production user sign-in and session handling. | High | Requires auth provider decision, security review, protected routes, and environment setup. Current Demo Auth is not production security. |
-| Production role/permission guard | Restrict actions by owner/admin/member role for real users. | High | Depends on production Auth and clear permission rules. Avoid promising before workflow is mapped. |
-| Archive/restore task safeguards | Add production-safe task archive, restore, or delete behavior. | Medium | Current Delete Task is demo-only hard delete; production scope needs recovery behavior and audit expectations. |
-| Live AI summary generation | Generate daily/weekly summaries from task data. | High | Requires AI provider, prompt design, cost controls, logging, and error handling. |
-| OpenAI SDK integration | Add model calls through an AI integration layer. | High | Depends on live AI scope, secrets management, rate limits, and output safety. |
-| Export report | Export dashboard or summary data as a report. | Medium | Requires output format decision: PDF, CSV, Excel, or email-friendly text. |
-| Email/LINE notification | Send task or report notifications. | Medium | Requires notification provider, recipient rules, opt-in expectations, and failure handling. |
-| Google Sheet import/export | Import tasks or export reports through Google Sheets. | High | Requires API credentials, data mapping, sync conflict rules, and permission review. |
-| Realtime updates | Show live updates across users. | High | Requires realtime architecture and production security decisions. Not enabled in current MVP. |
-| Invite/team management | Invite users and manage workspace membership. | High | Depends on Auth, role rules, email delivery, and workspace access model. |
-| Billing integration | Add payment or subscription flows. | High | Requires pricing model, payment provider, legal/tax review, and production readiness. |
-| Custom dashboard page | Add a new dashboard for a client-specific metric or workflow. | Medium | Requires metric definitions and data model review. |
-| Custom workflow/status model | Change or expand task statuses for a client workflow. | Medium | May require schema, UI, seed data, and reporting updates. |
+Use this tier when the client needs a clear, small internal dashboard and the
+workflow is already simple.
 
-## 8. Custom Request Policy
+## 8. Tier 2: Workflow Dashboard Customization
 
-Custom requests should be handled through scope review before implementation.
+**Example planning range:** 20,000 - 35,000 THB
 
-Recommended policy:
+Best for small businesses, operations teams, or agencies that need a more
+tailored workflow dashboard.
 
-- Confirm the business workflow first.
-- Separate must-have requirements from nice-to-have ideas.
-- Avoid adding features without scope review.
-- Put advanced features into add-ons.
-- Confirm data model impact before implementation.
-- Do not promise production Auth, Billing, Realtime, or AI unless scoped.
-- Do not treat a demo MVP as production-ready without a production checklist.
+Typical scope:
 
-The safest sales posture is to sell a clear base dashboard, then scope advanced
-features as deliberate add-ons.
+- Dashboard customized around the client workflow.
+- Task list, task detail, create task, edit task, and controlled delete behavior
+  if scoped.
+- Workflow board or status view.
+- Team workload overview.
+- Saved summary/report page.
+- Demo role behavior or simple app-level role planning.
+- Custom fields if scoped as part of the client workflow.
+- Demo data planning and setup guidance.
+- Documentation for client handoff.
 
-## 9. Delivery Timeline Estimate
+Not included by default:
 
-| Package | Rough timeline |
-| --- | --- |
-| Starter Internal Dashboard | 5-10 working days |
-| Pro Workflow Dashboard | 10-17 working days |
-| Custom Internal System | 3-6+ weeks |
+- Live AI generation unless scoped as an add-on.
+- Production Auth or production role system.
+- Workspace isolation.
+- Billing.
+- Realtime collaboration.
+- Invite system.
+- External API integrations.
 
-Timelines depend on scope, feedback speed, data complexity, integrations,
-deployment needs, and whether the client already understands their workflow.
+This tier is the strongest fit for a productized freelance dashboard offer:
+focused enough to deliver, but flexible enough for a real client workflow.
 
-## 10. Sales Positioning
+## 9. Tier 3: Production-Ready Custom System
 
-### Portfolio Reviewer
+**Example planning range:** 40,000 - 80,000+ THB
 
-FlowDesk AI demonstrates a practical internal dashboard MVP with Prisma-backed
-data, task create/edit flows, read-only workflow and reporting views, and clear
-product boundaries.
+Best for teams that need real users, production data, custom workflow rules,
+approval flows, integrations, reporting, or stronger access control.
 
-### Freelance Client
+Possible scope:
 
-FlowDesk AI can be positioned as a starting point for a custom internal
-dashboard that helps a small team see tasks, owners, deadlines, blockers, and
-workload in one place.
+- Production Auth planning and implementation.
+- Database-backed users.
+- Workspace or organization isolation.
+- Membership and role model design.
+- Server-side authorization checks.
+- Safer delete behavior through archive/soft delete and restore planning.
+- Audit log if required.
+- Custom dashboards and reporting.
+- External integrations.
+- Deployment, security, and maintenance planning.
 
-### Small Business Owner
+This tier must start with discovery. It should not be sold as a simple dashboard
+if the client needs production security, sensitive data handling, multi-user
+permissions, or business-critical operations.
 
-This dashboard concept helps replace scattered manual updates with a clearer
-internal workflow view. The first version can stay simple, then add production
-Auth, production permissions, AI, notifications, or integrations only when the
-business case is clear.
+## 10. Optional Add-ons
 
-## 11. Risks and Boundaries
+| Add-on | What it adds | Notes |
+| --- | --- | --- |
+| Live AI summary generation | Generates daily or weekly summaries from task data. | Optional paid add-on only. Requires AI provider choice, prompt design, secret handling, cost controls, and QA. |
+| OpenAI/Gemini integration | Connects a model provider for live AI features. | Not enabled in the current MVP. Must be scoped separately. |
+| Production Auth / User Management | Real sign-in, database-backed users, and secure sessions. | Demo Auth exists now, but it is only for controlled portfolio walkthroughs. |
+| Role and permission system | Production permission rules for real users. | Requires production Auth and server-side authorization design. |
+| Archive / Restore | Safer task removal with restore or recycle-bin behavior. | Current Delete Task is hard delete and demo-only. |
+| Audit Log | Records important actions for review and accountability. | Useful for production multi-user systems. |
+| Realtime updates | Live updates across users or dashboards. | Requires realtime architecture and security review. |
+| Notifications | Email, LINE, Slack, or similar reminders and updates. | Requires provider setup, recipient rules, and failure handling. |
+| Invite flow | Invite and manage team members. | Requires production Auth and user management. |
+| Billing integration | Payment or subscription flows. | Should come after client/product validation and production readiness planning. |
+| External integrations | Google Sheets, CRM, webhooks, or custom APIs. | Requires data mapping, permission review, and testing. |
+| Custom dashboard page | A new dashboard for client-specific KPIs or reports. | Requires metric definitions and data availability. |
 
-- Over-scoping a small dashboard into a full internal system.
-- Underpricing custom workflow, integrations, or permission logic.
-- Selling SaaS promises before production Auth and Billing are implemented.
-- Claiming live AI before integration exists.
-- Not separating the demo MVP from a production-ready system.
-- Adding advanced features before the client workflow is confirmed.
-- Treating draft price ranges as fixed quotes.
+## 11. AI Summary Add-on Positioning
 
-## 12. Recommended Next Product Step
+FlowDesk AI should be described as an AI-ready task dashboard, not as a live AI
+product today.
 
-Recommended next steps after Workstream A:
+Safe client wording:
 
-- Keep the current MVP as the demo/portfolio version.
-- Use these product tiers for pricing conversations and scope framing.
-- Prioritize production Auth, archive/restore safeguards, and Live AI only when
-  moving toward production or paid custom scope.
-- Avoid building Billing before validating client interest.
-- Keep advanced features in add-on scope until a real client workflow requires
-  them.
+- The MVP includes a read-only saved AI summary/history page.
+- The product is designed for future AI summary integration.
+- Live AI generation can be scoped as an optional paid add-on.
+
+Do not claim that OpenAI, Gemini, autonomous agents, real-time AI analysis, or
+production AI automation are connected in the current MVP.
+
+## 12. Production Auth / User Management Add-on Positioning
+
+The current app includes Demo Auth / Portfolio Auth with `admin`, `manager`, and
+`viewer` roles. This supports controlled walkthroughs and portfolio demos.
+
+Production client use requires separate work, such as:
+
+- A production auth provider.
+- Database-backed users.
+- Secure session handling.
+- User management.
+- Workspace or organization isolation.
+- Production permission rules.
+- Security review.
+
+Do not describe the current demo auth as production-grade authentication or
+tenant-safe access control.
+
+## 13. Archive / Restore Add-on Positioning
+
+Current Delete Task is a limited MVP demo-only hard delete from `/tasks/[id]`.
+It is useful for demonstrating task lifecycle completion, but it is not safe
+enough for production client data by itself.
+
+A production-ready archive/restore add-on may include:
+
+- Archive or soft-delete fields.
+- Restore or recycle-bin flow.
+- Filters to hide archived tasks from active views.
+- Audit log for delete/archive actions.
+- Permission rules around who can archive or restore.
+
+This add-on may require Prisma schema changes and migration planning.
+
+## 14. Realtime / Notifications Add-on Positioning
+
+Realtime and notifications should be scoped only when the business workflow
+needs them.
+
+Possible examples:
+
+- Task assignment notifications.
+- Daily summary email or LINE notification.
+- Near-deadline reminders.
+- Live task status updates for multiple users.
+
+These are not enabled in the current MVP and should not be promised without
+provider, security, and maintenance planning.
+
+## 15. Billing Add-on Positioning
+
+Billing is not implemented in the current MVP.
+
+Billing should usually come after:
+
+- A validated client or product use case.
+- Production Auth.
+- Clear pricing model.
+- Payment provider decision.
+- Tax, invoice, and maintenance expectations.
+- Deployment and security review.
+
+For freelance client work, billing integration is often a later custom phase,
+not part of the dashboard foundation.
+
+## 16. Client Qualification Questions
+
+Use these questions before confirming scope or price:
+
+- Who will use the dashboard day to day?
+- How many people need access?
+- What tasks or workflow stages must be tracked?
+- Is the dashboard for demo/internal use or real production data?
+- Does the client need create, edit, delete, archive, or approval flows?
+- Is live AI summary generation actually needed, or is saved reporting enough?
+- Are notifications, imports, exports, or integrations required?
+- Is production Auth required from day one?
+- Is the data sensitive or client-confidential?
+- Who will maintain the app after delivery?
+
+## 17. Scope Boundaries And Risk Notes
+
+Important boundaries:
+
+- Do not treat the current MVP as ready for real production client data.
+- Do not promise production security from Demo Auth / Portfolio Auth.
+- Do not sell live AI until provider, cost, prompt, and failure handling are
+  scoped.
+- Do not include billing, realtime, invites, integrations, or API routes by
+  default.
+- Do not use hard delete for production data without archive/restore planning.
+- Do not underprice workflows that need custom data models or permission logic.
+- Do not present example planning ranges as fixed commitments.
+
+The safest client approach is to sell the dashboard foundation first, then
+scope production hardening and add-ons deliberately.
+
+## 18. Recommended Sales Positioning
+
+For a small business owner:
+
+> FlowDesk AI is a dashboard foundation that helps your team see tasks, owners,
+> statuses, blockers, and workload in one place. We can start with a clear
+> internal workflow dashboard, then add production auth, AI summaries,
+> notifications, or integrations only if your workflow needs them.
+
+For a freelance marketplace listing:
+
+> I build custom internal task dashboards for small teams using a proven
+> FlowDesk AI foundation. The base package covers workflow visibility and task
+> tracking. Production auth, live AI summaries, integrations, billing, and
+> realtime features are scoped separately based on your needs.
+
+For a portfolio reviewer:
+
+> FlowDesk AI demonstrates full-stack dashboard planning, Prisma-backed data,
+> task create/edit/delete workflows, demo auth and role guards, read-only
+> reporting views, and clear product boundaries around AI and production
+> readiness.
+
+## 19. What Not To Promise
+
+Do not promise these as current MVP features:
+
+- Live AI generation.
+- OpenAI/Gemini connection.
+- Autonomous AI agents.
+- Real-time AI analysis.
+- Production AI automation.
+- Production Auth.
+- Production RBAC or enterprise permission system.
+- Tenant-safe workspace isolation.
+- RLS.
+- Supabase Client.
+- Billing.
+- Realtime collaboration.
+- Invite system.
+- API routes.
+- Archive / Soft Delete.
+- Restore / Recycle Bin.
+- Audit Log.
+- Production multi-user safeguards.
+
+These can be discussed as optional add-ons or future production-hardening work,
+not as already implemented features.
+
+## 20. Final Offer Summary
+
+FlowDesk AI is strongest as a demo-ready dashboard foundation and portfolio-ready
+MVP that can become a custom client system through scoped paid work.
+
+The current foundation is useful for showing task visibility, workflow status,
+demo auth roles, and saved summary history. A real client production system
+should add the right hardening only after the workflow, users, data sensitivity,
+and business value are clear.
